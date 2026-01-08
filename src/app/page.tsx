@@ -41,7 +41,7 @@ export default function Page() {
       <WeddingSection
         id="itinerario"
         title="Nuestro Itinerario"
-        subtitle="Los momentos clave de nuestro gran día para que nos acompañes en cada paso."
+        subtitle="Todos los momentos que formarán parte de nuestro gran día para que puedas acompañarnos en cada paso."
         textureImage="/backgrounds/fondo_soft_ivory_elegance.png"
         withSeparator
         noAnimation
@@ -56,6 +56,7 @@ export default function Page() {
         subtitle="Hospedaje seleccionado para que disfrutes al máximo de tu estancia en Oaxaca."
         textureImage="/backgrounds/fondo_soft_sage_green.png"
         topGradient
+        noAnimation={true}
       >
         <WeddingHotels
           locale="es"
@@ -88,7 +89,7 @@ export default function Page() {
               instructions: "Reservar llamando al 800 8385364 mencionando el nombre del evento “Boda Fernanda González Pozas & Diego Garza González” o a través del link con el código FYD.",
               rate: "Tarifa Preferencial",
               deadline: "Bloqueo Abierto",
-              contact: "Línea IHG",
+              contact: "Directo en el link",
               coords: { lat: 17.0706, lng: -96.7231 },
               distanceToVenue: "0.5 km",
               durationToVenue: "7 mins"

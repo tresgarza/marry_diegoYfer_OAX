@@ -11,7 +11,7 @@ type Language = "es" | "en"
 
 interface ItineraryEvent {
   id: string
-  dayKey: "saturday" | "sunday"
+  dayKey: "friday" | "saturday"
   time: string
   title: string
   description: string
@@ -20,34 +20,34 @@ interface ItineraryEvent {
   icon: React.ReactNode
 }
 
-const SATURDAY_EVENTS: ItineraryEvent[] = [
-  {
-    id: "calenda",
-    dayKey: "saturday",
-    time: "5:30 pm",
-    title: "Calenda Oaxaqueña",
-    description: "Iniciaremos con una tradicional calenda de tehuanas desde el Templo de Santo Domingo hacia Restaurante Catedral.",
-    locationName: "Templo de Santo Domingo",
-    coords: { lat: 17.0664, lng: -96.7233 },
-    icon: <Music className="h-5 w-5" />,
-  },
-  {
-    id: "rompehielos",
-    dayKey: "saturday",
-    time: "6:15 pm",
-    title: "Rompehielos",
-    description: "Brindis de bienvenida y convivencia en Restaurante Catedral para conocernos antes del gran día.",
-    locationName: "Restaurante Catedral",
-    coords: { lat: 17.0608, lng: -96.7254 },
-    icon: <Utensils className="h-5 w-5" />,
-  },
+const FRIDAY_EVENTS: ItineraryEvent[] = [
+    {
+      id: "calenda",
+      dayKey: "friday",
+      time: "5:30 pm",
+      title: "Calenda Oaxaqueña",
+      description: "Iniciaremos con una calenda tradicional desde el Templo de Santo Domingo hacia el restaurante catedral.",
+      locationName: "Templo de Santo Domingo",
+      coords: { lat: 17.0664, lng: -96.7233 },
+      icon: <Music className="h-5 w-5" />,
+    },
+    {
+      id: "rompehielos",
+      dayKey: "friday",
+      time: "6:30 pm",
+      title: "Rompehielos",
+      description: "Cóctel de bienvenida y convivencia en el restaurante catedral",
+      locationName: "el restaurante catedral",
+      coords: { lat: 17.0608, lng: -96.7254 },
+      icon: <Utensils className="h-5 w-5" />,
+    },
 ]
 
-const SUNDAY_EVENTS: ItineraryEvent[] = [
+const SATURDAY_EVENTS_LIST: ItineraryEvent[] = [
   {
     id: "ceremonia",
-    dayKey: "sunday",
-    time: "5:45 pm",
+    dayKey: "saturday",
+    time: "5:30 pm",
     title: "Ceremonia Religiosa",
     description: "Acompáñanos a celebrar nuestra unión matrimonial en este recinto histórico de la ciudad.",
     locationName: "Templo de Santo Domingo",
@@ -56,17 +56,17 @@ const SUNDAY_EVENTS: ItineraryEvent[] = [
   },
   {
     id: "recepcion",
-    dayKey: "sunday",
+    dayKey: "saturday",
     time: "7:00 pm",
     title: "Recepción",
-    description: "Cena, baile y mucha alegría para celebrar nuestro amor en una noche inolvidable.",
+    description: "Acompáñanos a celebrar nuestra unión en una noche llena de alegría, música y amor",
     locationName: "Salón Berriozábal 120",
     coords: { lat: 17.0629, lng: -96.7219 },
     icon: <HeartIcon className="h-5 w-5" />,
   },
 ]
 
-const ALL_EVENTS = [...SATURDAY_EVENTS, ...SUNDAY_EVENTS]
+const ALL_EVENTS = [...FRIDAY_EVENTS, ...SATURDAY_EVENTS_LIST]
 
 const EVENT_ICONS: { [key: string]: string } = {
   calenda: "🎶",
@@ -141,7 +141,7 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
                 } : undefined,
                 icon: {
                   path: google.maps.SymbolPath.CIRCLE,
-                  fillColor: event.dayKey === "sunday" ? COLORS.secondary : COLORS.primary,
+                  fillColor: event.dayKey === "saturday" ? COLORS.secondary : COLORS.primary,
                   fillOpacity: 1,
                   strokeWeight: 3,
                   strokeColor: "#FFFFFF",
@@ -179,7 +179,7 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
           const isActive = event.id === activeEventId
           marker.setIcon({
             path: google.maps.SymbolPath.CIRCLE,
-            fillColor: event.dayKey === "sunday" ? COLORS.secondary : COLORS.primary,
+            fillColor: event.dayKey === "saturday" ? COLORS.secondary : COLORS.primary,
             fillOpacity: 1,
             strokeWeight: 3,
             strokeColor: "#FFFFFF",
@@ -233,18 +233,18 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
         {/* Timeline Column */}
         <div className="w-full lg:w-[55%]">
           
-          {/* SÁBADO 11 */}
+          {/* VIERNES 11 */}
           <div>
             <DayHeader 
               dayNumber="11" 
-              dayName="Sábado" 
+              dayName="Viernes" 
               monthYear="Septiembre 2026" 
             />
             <div className="relative mt-12 px-4 pb-24">
               <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/30 to-primary/20 lg:-translate-x-1/2" />
               
               <div className="space-y-16 lg:space-y-24">
-                {SATURDAY_EVENTS.map((event, index) => (
+                {FRIDAY_EVENTS.map((event, index) => (
                   <TimelineItem 
                     key={event.id}
                     event={event}
@@ -259,22 +259,22 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
             </div>
           </div>
 
-          {/* DOMINGO 12 */}
+          {/* SÁBADO 12 */}
           <div className="mt-12">
             <DayHeader 
               dayNumber="12" 
-              dayName="Domingo" 
+              dayName="Sábado" 
               monthYear="Septiembre 2026" 
             />
             <div className="relative mt-12 px-4 pb-12">
               <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/30 to-transparent lg:-translate-x-1/2" />
               
               <div className="space-y-16 lg:space-y-24">
-                {SUNDAY_EVENTS.map((event, index) => (
+                {SATURDAY_EVENTS_LIST.map((event, index) => (
                   <TimelineItem 
                     key={event.id}
                     event={event}
-                    index={index + SATURDAY_EVENTS.length}
+                    index={index + FRIDAY_EVENTS.length}
                     onInView={handleEventInView}
                     onClick={() => handleItemClick(event.id, event.coords)}
                     isActive={activeEventId === event.id}
@@ -287,42 +287,46 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
         </div>
 
           {/* Sticky Map Column */}
-          <div className="w-full lg:w-[45%] lg:relative">
-            <div className="lg:sticky lg:top-40 h-[400px] lg:h-[80vh] w-full rounded-[2rem] overflow-hidden border border-border bg-muted shadow-2xl">
-            <div ref={mapRef} className="w-full h-full" />
-            
-            <div className="absolute bottom-6 left-6 right-6 p-5 bg-white/95 backdrop-blur-md rounded-2xl border border-border shadow-xl">
-              <div className="flex items-center gap-4">
-                <div className={cn(
-                  "p-3 rounded-xl",
-                  activeEvent?.dayKey === "sunday" ? "bg-secondary/20 text-secondary" : "bg-primary/20 text-primary"
-                )}>
-                  {activeEvent?.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={cn(
-                    "text-[11px] font-bold uppercase tracking-[0.15em]",
-                    activeEvent?.dayKey === "sunday" ? "text-secondary" : "text-primary"
+          <div className="w-full lg:w-[45%] sticky lg:sticky top-[68px] lg:top-40 z-30 order-1 lg:order-2 bg-inherit">
+            <div className="h-[250px] md:h-[400px] lg:h-[80vh] w-full rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden border border-border bg-muted shadow-xl lg:shadow-2xl">
+              <div ref={mapRef} className="w-full h-full" />
+              
+              <div className="absolute bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 p-4 lg:p-5 bg-white/95 backdrop-blur-md rounded-xl lg:rounded-2xl border border-border shadow-xl">
+                <div className="flex items-center gap-3 lg:gap-4">
+                  <div className={cn(
+                    "p-2.5 lg:p-3 rounded-lg lg:rounded-xl",
+                    activeEvent?.dayKey === "saturday" ? "bg-secondary/20 text-secondary" : "bg-primary/20 text-primary"
                   )}>
-                    {activeEvent?.dayKey === "sunday" ? "Domingo 12" : "Sábado 11"} · {activeEvent?.time}
-                  </p>
-                  <h4 className="font-heading text-lg text-foreground truncate">
-                    {activeEvent?.locationName}
-                  </h4>
+                    {activeEvent?.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={cn(
+                      "text-[9px] lg:text-[11px] font-bold uppercase tracking-[0.15em]",
+                      activeEvent?.dayKey === "saturday" ? "text-secondary" : "text-primary"
+                    )}>
+                      {activeEvent?.dayKey === "saturday" ? "Sábado 12" : "Viernes 11"} · {activeEvent?.time}
+                    </p>
+                    <h4 className="font-heading text-base lg:text-lg text-foreground truncate">
+                      {activeEvent?.locationName}
+                    </h4>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${activeEvent?.coords.lat},${activeEvent?.coords.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 lg:p-3 bg-foreground text-background rounded-lg lg:rounded-xl hover:scale-105 transition-transform shrink-0"
+                    title="Abrir en Google Maps"
+                  >
+                    <Navigation className="h-4 w-4 lg:h-5 lg:w-5" />
+                  </a>
                 </div>
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${activeEvent?.coords.lat},${activeEvent?.coords.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-foreground text-background rounded-xl hover:scale-105 transition-transform shrink-0"
-                  title="Abrir en Google Maps"
-                >
-                  <Navigation className="h-5 w-5" />
-                </a>
               </div>
             </div>
+            {/* Mobile indicator */}
+            <div className="lg:hidden flex justify-center mt-2 mb-4">
+              <div className="w-12 h-1 bg-ink/10 rounded-full" />
+            </div>
           </div>
-        </div>
       </div>
     </div>
   )

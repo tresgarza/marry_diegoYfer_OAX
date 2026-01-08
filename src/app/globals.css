@@ -23,8 +23,8 @@
   --color-primary: #243A2B;
   --color-primary-foreground: #ffffff;
   
-  --color-secondary: transparent;
-  --color-secondary-foreground: #8C6A5D; /* Muted bronze for secondary */
+    --color-secondary: #8C6A5D;
+    --color-secondary-foreground: #ffffff; /* White text on secondary bg */
   
   --radius-lg: 24px;
   --radius-md: 18px;

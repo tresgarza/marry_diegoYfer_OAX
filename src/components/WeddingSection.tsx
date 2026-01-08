@@ -45,7 +45,7 @@ interface WeddingSectionProps {
     <section
       id={id}
       className={cn(
-        "relative scroll-mt-24 py-16 md:py-24",
+        "relative scroll-mt-20 py-12 md:py-24 lg:py-28",
         className
       )}
     >
@@ -63,22 +63,22 @@ interface WeddingSectionProps {
       ) : null}
 
 
-      <div className={cn("container mx-auto max-w-6xl px-4 sm:px-6 md:px-8 relative", containerClassName)}>
+      <div className={cn("container mx-auto max-w-6xl px-4 md:px-8 relative", containerClassName)}>
         {(title || subtitle) && (
           <motion.header
-            className="mb-10 md:mb-16 text-center md:text-left"
+            className="mb-8 md:mb-16 text-center lg:text-left"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7, ease: [0.21, 0.45, 0.32, 0.9] }}
           >
             {title && (
-              <h2 className="font-heading text-3xl md:text-4xl text-ink tracking-tight">
+              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-ink tracking-tight">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="mt-2 text-sm sm:text-base text-ink-2 max-w-2xl font-sans opacity-70">
+              <p className="mt-3 text-xs sm:text-sm md:text-base lg:text-lg text-ink-2 max-w-2xl lg:max-w-3xl font-sans opacity-80 leading-relaxed mx-auto lg:mx-0">
                 {subtitle}
               </p>
             )}

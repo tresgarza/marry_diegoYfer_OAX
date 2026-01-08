@@ -2,10 +2,10 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Instagram, Coffee, UtensilsCrossed, Martini, MapPin, Award, Navigation, ChevronRight, Star } from "lucide-react";
+import { Instagram, Coffee, UtensilsCrossed, Martini, MapPin, Award, Navigation, ChevronRight, Star, Sparkles, Landmark } from "lucide-react";
 import { useInView } from "react-intersection-observer";
-import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { cn } from "@/lib/utils";
+import { WeddingMap } from "./WeddingMap";
 
 type Language = "es" | "en";
 
@@ -21,6 +21,8 @@ interface GastronomyItem {
   maps: string;
   coords: { lat: number; lng: number };
   category: string;
+  distanceToSantoDomingo?: string;
+  distanceToBerriozabal?: string;
 }
 
 type CategoryId = "breakfast" | "meals" | "drinks";
@@ -37,7 +39,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@boulencpan",
     instagram: "https://www.instagram.com/boulencpan/",
     maps: "https://www.google.com/maps/search/?api=1&query=Boulenc%20Oaxaca",
-    coords: { lat: 17.0655, lng: -96.7262 }
+    coords: { lat: 17.0655, lng: -96.7262 },
+    distanceToSantoDomingo: "350 m",
+    distanceToBerriozabal: "550 m"
   },
   {
     id: "panam",
@@ -49,7 +53,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@panaeme",
     instagram: "https://www.instagram.com/panaeme/",
     maps: "https://www.google.com/maps/search/?api=1&query=PAN%3AAM%20Oaxaca",
-    coords: { lat: 17.0645, lng: -96.7245 }
+    coords: { lat: 17.0645, lng: -96.7245 },
+    distanceToSantoDomingo: "250 m",
+    distanceToBerriozabal: "450 m"
   },
   {
     id: "itanoni",
@@ -62,7 +68,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@itanonioficial",
     instagram: "https://www.instagram.com/itanonioficial/",
     maps: "https://www.google.com/maps/search/?api=1&query=Itanon%C3%AD%20Tetelas%20Oaxaca",
-    coords: { lat: 17.0863, lng: -96.7214 }
+    coords: { lat: 17.0863, lng: -96.7214 },
+    distanceToSantoDomingo: "2.2 km",
+    distanceToBerriozabal: "2.1 km"
   },
   {
     id: "cafe-tradicion",
@@ -74,7 +82,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@cafetradicionoax",
     instagram: "https://www.instagram.com/cafetradicionoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Tradici%C3%B3n%20Oaxaca",
-    coords: { lat: 17.0610, lng: -96.7260 }
+    coords: { lat: 17.0610, lng: -96.7260 },
+    distanceToSantoDomingo: "650 m",
+    distanceToBerriozabal: "850 m"
   },
   {
     id: "agua-que-canta",
@@ -86,7 +96,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@agua.que.canta",
     instagram: "https://www.instagram.com/agua.que.canta/",
     maps: "https://www.google.com/maps/search/?api=1&query=Agua%20Que%20Canta%20Oaxaca",
-    coords: { lat: 17.0620, lng: -96.7250 }
+    coords: { lat: 17.0620, lng: -96.7250 },
+    distanceToSantoDomingo: "500 m",
+    distanceToBerriozabal: "700 m"
   },
   {
     id: "pan-con-madre",
@@ -98,7 +110,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@panconmadre",
     instagram: "https://www.instagram.com/panconmadre/",
     maps: "https://www.google.com/maps/search/?api=1&query=Pan%20con%20Madre%20Oaxaca",
-    coords: { lat: 17.0670, lng: -96.7270 }
+    coords: { lat: 17.0670, lng: -96.7270 },
+    distanceToSantoDomingo: "400 m",
+    distanceToBerriozabal: "600 m"
   },
   {
     id: "yegole",
@@ -110,7 +124,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@yegolecafe",
     instagram: "https://www.instagram.com/yegolecafe/",
     maps: "https://www.google.com/maps/search/?api=1&query=Yegol%C3%A9%20Oaxaca",
-    coords: { lat: 17.0635, lng: -96.7245 }
+    coords: { lat: 17.0635, lng: -96.7245 },
+    distanceToSantoDomingo: "350 m",
+    distanceToBerriozabal: "550 m"
   },
   // Comida/Cena
   {
@@ -124,7 +140,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@danzantesoaxaca",
     instagram: "https://www.instagram.com/danzantesoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Los%20Danzantes%20Oaxaca",
-    coords: { lat: 17.0660, lng: -96.7235 }
+    coords: { lat: 17.0660, lng: -96.7235 },
+    distanceToSantoDomingo: "100 m",
+    distanceToBerriozabal: "250 m"
   },
   {
     id: "pitiona",
@@ -136,7 +154,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@pitionaoax",
     instagram: "https://www.instagram.com/pitionaoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=La%20Pitiona%20Oaxaca",
-    coords: { lat: 17.0665, lng: -96.7230 }
+    coords: { lat: 17.0665, lng: -96.7230 },
+    distanceToSantoDomingo: "50 m",
+    distanceToBerriozabal: "200 m"
   },
   {
     id: "casa-oaxaca",
@@ -149,7 +169,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@casaoaxacaelrestaurante",
     instagram: "https://www.instagram.com/casaoaxacaelrestaurante/",
     maps: "https://www.google.com/maps/search/?api=1&query=Casa%20Oaxaca%20el%20Restaurante",
-    coords: { lat: 17.0664, lng: -96.7233 }
+    coords: { lat: 17.0664, lng: -96.7233 },
+    distanceToSantoDomingo: "50 m",
+    distanceToBerriozabal: "200 m"
   },
   {
     id: "quince-letras",
@@ -162,7 +184,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@lasquinceletrasoax",
     instagram: "https://www.instagram.com/lasquinceletrasoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Las%20Quince%20Letras%20Oaxaca",
-    coords: { lat: 17.0648, lng: -96.7225 }
+    coords: { lat: 17.0648, lng: -96.7225 },
+    distanceToSantoDomingo: "250 m",
+    distanceToBerriozabal: "350 m"
   },
   {
     id: "tierra-sol",
@@ -175,7 +199,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@tierradelsolrestaurante",
     instagram: "https://www.instagram.com/tierradelsolrestaurante/",
     maps: "https://www.google.com/maps/search/?api=1&query=Tierra%20del%20Sol%20Oaxaca",
-    coords: { lat: 17.0652, lng: -96.7238 }
+    coords: { lat: 17.0652, lng: -96.7238 },
+    distanceToSantoDomingo: "150 m",
+    distanceToBerriozabal: "300 m"
   },
   {
     id: "palapa-raul",
@@ -187,7 +213,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@lapalapaderaul.oax",
     instagram: "https://www.instagram.com/lapalapaderaul.oax/",
     maps: "https://www.google.com/maps/search/?api=1&query=La%20Palapa%20de%20Ra%C3%BAl%20Oaxaca",
-    coords: { lat: 17.0590, lng: -96.7180 }
+    coords: { lat: 17.0590, lng: -96.7180 },
+    distanceToSantoDomingo: "1.0 km",
+    distanceToBerriozabal: "1.1 km"
   },
   {
     id: "criollo",
@@ -200,7 +228,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@criollo_oax",
     instagram: "https://www.instagram.com/criollo_oax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Criollo%20Restaurante%20Oaxaca",
-    coords: { lat: 17.0630, lng: -96.7370 }
+    coords: { lat: 17.0630, lng: -96.7370 },
+    distanceToSantoDomingo: "1.5 km",
+    distanceToBerriozabal: "1.7 km"
   },
   // Drinks
   {
@@ -213,7 +243,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@la_popular_oaxaca",
     instagram: "https://www.instagram.com/la_popular_oaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=La%20Popular%20Oaxaca",
-    coords: { lat: 17.0642, lng: -96.7238 }
+    coords: { lat: 17.0642, lng: -96.7238 },
+    distanceToSantoDomingo: "250 m",
+    distanceToBerriozabal: "400 m"
   },
   {
     id: "otra-popular",
@@ -223,7 +255,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     tag: "Bar accesible",
     description: "Opción muy casual y “sin complicaciones”; buena para pasar por un drink rápido.",
     maps: "https://www.google.com/maps/search/?api=1&query=La%20Otra%20Popular%20Oaxaca",
-    coords: { lat: 17.0650, lng: -96.7230 }
+    coords: { lat: 17.0650, lng: -96.7230 },
+    distanceToSantoDomingo: "150 m",
+    distanceToBerriozabal: "300 m"
   },
   {
     id: "selva",
@@ -236,7 +270,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@selvaoaxaca",
     instagram: "https://www.instagram.com/selvaoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Selva%20Oaxaca%20Cocktail%20Bar",
-    coords: { lat: 17.0660, lng: -96.7235 }
+    coords: { lat: 17.0660, lng: -96.7235 },
+    distanceToSantoDomingo: "50 m",
+    distanceToBerriozabal: "200 m"
   },
   {
     id: "sabina-sabe",
@@ -249,7 +285,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@sabinasabeoaxaca",
     instagram: "https://www.instagram.com/sabinasabeoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Sabina%20Sabe%20Oaxaca",
-    coords: { lat: 17.0640, lng: -96.7235 }
+    coords: { lat: 17.0640, lng: -96.7235 },
+    distanceToSantoDomingo: "300 m",
+    distanceToBerriozabal: "450 m"
   },
   {
     id: "amantes-terraza",
@@ -261,7 +299,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@terrazalosamantesoax",
     instagram: "https://www.instagram.com/terrazalosamantesoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Terraza%20Los%20Amantes%20Oaxaca",
-    coords: { lat: 17.0665, lng: -96.7235 }
+    coords: { lat: 17.0665, lng: -96.7235 },
+    distanceToSantoDomingo: "50 m",
+    distanceToBerriozabal: "200 m"
   },
   {
     id: "amantes-mezcal",
@@ -273,7 +313,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@losamantesmezcal",
     instagram: "https://www.instagram.com/losamantesmezcal/",
     maps: "https://www.google.com/maps/search/?api=1&query=Los%20Amantes%20Mezcal%20Oaxaca",
-    coords: { lat: 17.0665, lng: -96.7235 }
+    coords: { lat: 17.0665, lng: -96.7235 },
+    distanceToSantoDomingo: "50 m",
+    distanceToBerriozabal: "200 m"
   },
   {
     id: "praga",
@@ -285,183 +327,174 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@pragaoaxaca",
     instagram: "https://www.instagram.com/pragaoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Praga%20Oaxaca",
-    coords: { lat: 17.0615, lng: -96.7240 }
+    coords: { lat: 17.0615, lng: -96.7240 },
+    distanceToSantoDomingo: "550 m",
+    distanceToBerriozabal: "700 m"
   },
 ];
 
-const CATEGORIES: { id: CategoryId; title: { es: string; en: string }; icon: React.ComponentType<any> }[] = [
-  { id: "breakfast", title: { es: "Desayuno & Brunch", en: "Breakfast & Brunch" }, icon: Coffee },
-  { id: "meals", title: { es: "Comida & Cena", en: "Lunch & Dinner" }, icon: UtensilsCrossed },
-  { id: "drinks", title: { es: "Drinks & Cócteles", en: "Drinks & Cocktails" }, icon: Martini },
+const CATEGORIES: { id: CategoryId; title: { es: string; en: string }; color: string }[] = [
+  { id: "breakfast", title: { es: "Desayuno/Brunch", en: "Breakfast/Brunch" }, color: "#B45309" },
+  { id: "meals", title: { es: "Comida/Cena", en: "Lunch/Dinner" }, color: "#059669" },
+  { id: "drinks", title: { es: "Drinks", en: "Drinks" }, color: "#5B21B6" },
 ];
 
 export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) {
   const [activeTab, setActiveTab] = React.useState<CategoryId>(CATEGORIES[0].id);
-  const [map, setMap] = React.useState<google.maps.Map | null>(null);
   const [activeItemId, setActiveItemId] = React.useState<string>(GASTRO_DATA[0].id);
-  const mapRef = React.useRef<HTMLDivElement>(null);
+  const [isLocked, setIsLocked] = React.useState(false);
   const sectionRef = React.useRef<HTMLDivElement>(null);
-  const markersRef = React.useRef<{ [key: string]: google.maps.Marker }>({});
+  const lockTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const observerRef = React.useRef<IntersectionObserver | null>(null);
+
+  const lockObserver = (ms = 800) => {
+    setIsLocked(true);
+    if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+    lockTimerRef.current = setTimeout(() => setIsLocked(false), ms);
+  };
 
   const filteredItems = GASTRO_DATA.filter(item => item.category === activeTab);
 
-  const handleTabChange = (catId: CategoryId) => {
-    setActiveTab(catId);
-    // Set first item of category as active
-    const firstItem = GASTRO_DATA.find(i => i.category === catId);
-    if (firstItem) setActiveItemId(firstItem.id);
-    
-    // Scroll to top of section
-    if (sectionRef.current) {
-      const offset = 100; // Offset for sticky header
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = sectionRef.current.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+  const activeItemIdRef = React.useRef(activeItemId);
+  const lastUpdateRef = React.useRef(Date.now());
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
-
-  // Initialize Map
   React.useEffect(() => {
-    const initMap = async () => {
-      try {
-        setOptions({
-          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-          v: "weekly",
-        });
+    activeItemIdRef.current = activeItemId;
+  }, [activeItemId]);
 
-        const { Map } = await importLibrary("maps");
-        
-        if (mapRef.current && !map) {
-          const newMap = new Map(mapRef.current, {
-            center: GASTRO_DATA[0].coords,
-            zoom: 15,
-            styles: MAP_STYLE,
-            disableDefaultUI: true,
-            zoomControl: true,
-          });
+  React.useEffect(() => {
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      // If locked or updated too recently, skip
+      if (isLocked || Date.now() - lastUpdateRef.current < 100) return;
 
-          GASTRO_DATA.forEach((item) => {
-            const marker = new google.maps.Marker({
-              position: item.coords,
-              map: newMap,
-              title: item.name,
-              icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                fillColor: "#C66B3D",
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: "#FFFFFF",
-                scale: 8,
-              },
-            });
-            markersRef.current[item.id] = marker;
-          });
-
-          setMap(newMap);
+      // Find the best candidate: must be intersecting and have the highest ratio
+      let bestCandidate: { id: string, ratio: number } | null = null;
+      
+      entries.forEach(entry => {
+        const itemId = entry.target.getAttribute('data-gastro-id');
+        if (itemId && entry.isIntersecting) {
+          if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
+            bestCandidate = { id: itemId, ratio: entry.intersectionRatio };
+          }
         }
-      } catch (error) {
-        console.error("Error loading Google Maps:", error);
+      });
+
+      // Threshold: only update if the best candidate is significantly visible
+      // and it's different from the current active item
+      if (bestCandidate && bestCandidate.id !== activeItemIdRef.current) {
+        if (bestCandidate.ratio > 0.4) {
+          setActiveItemId(bestCandidate.id);
+          lastUpdateRef.current = Date.now();
+        }
       }
     };
 
-    initMap();
-  }, [map]);
-
-  // Update Map based on active item
-  React.useEffect(() => {
-    if (!map) return;
-
-    GASTRO_DATA.forEach((item) => {
-      const marker = markersRef.current[item.id];
-      if (marker) {
-        const isActive = item.id === activeItemId;
-        const isInCategory = item.category === activeTab;
-        
-        marker.setVisible(isInCategory);
-        
-        if (isInCategory) {
-          marker.setIcon({
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: isActive ? "#C66B3D" : "#9CA3AF",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#FFFFFF",
-            scale: isActive ? 12 : 8,
-          });
-          
-          if (isActive) {
-            marker.setZIndex(1000);
-            map.panTo(item.coords);
-          } else {
-            marker.setZIndex(1);
-          }
-        }
-      }
+    observerRef.current = new IntersectionObserver(callback, {
+      threshold: [0.2, 0.4, 0.6, 0.8],
+      rootMargin: "-30% 0px -30% 0px" // Tighter band to prevent overlap triggers
     });
-  }, [activeItemId, activeTab, map]);
 
-  const activeItem = GASTRO_DATA.find(i => i.id === activeItemId);
 
-  const handleItemClick = (id: string, coords: { lat: number; lng: number }) => {
-    setActiveItemId(id);
-    const element = document.getElementById(`gastro-${id}`);
-    if (element) {
-      const elementRect = element.getBoundingClientRect();
-      const absoluteElementTop = elementRect.top + window.pageYOffset;
-      const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
-      window.scrollTo({
-        top: middle,
-        behavior: "smooth"
-      });
-    }
-    if (map) {
-      map.panTo(coords);
-      map.setZoom(17);
+    const currentObserver = observerRef.current;
+    const cards = document.querySelectorAll('[data-gastro-id]');
+    cards.forEach(card => currentObserver.observe(card));
+
+    return () => currentObserver.disconnect();
+  }, [isLocked, activeTab]);
+
+  const handleTabChange = (catId: CategoryId) => {
+    lockObserver(1500);
+    setActiveTab(catId);
+    const firstItem = GASTRO_DATA.find(i => i.category === catId);
+    if (firstItem) setActiveItemId(firstItem.id);
+    
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
-  const handleItemInView = React.useCallback((id: string) => {
+  const handleItemClick = (id: string) => {
+    lockObserver(1000);
     setActiveItemId(id);
-  }, []);
+    const element = document.getElementById(`gastro-${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  const handleMarkerClick = (marker: any) => {
+    const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
+    if (item) {
+      if (item.category !== activeTab) {
+        setActiveTab(item.category as CategoryId);
+      }
+      handleItemClick(item.id);
+    }
+  };
 
   return (
     <div ref={sectionRef} className="w-full">
       {/* Category Tabs */}
       <div className="flex justify-center mb-12 sticky top-16 md:top-20 z-40 py-4">
-        <div className="inline-flex p-1.5 bg-ink/5 backdrop-blur-md rounded-full border border-ink/10 shadow-lg">
+        <div className="inline-flex p-1.5 bg-white/80 backdrop-blur-md rounded-full border border-ink/10 shadow-lg">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
               onClick={() => handleTabChange(cat.id)}
               className={cn(
-                "flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300",
+                "flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-black transition-all duration-300",
                 activeTab === cat.id
-                  ? "bg-ink text-white shadow-lg"
+                  ? "text-white shadow-lg"
                   : "text-ink/60 hover:text-ink hover:bg-white/50"
               )}
+              style={{
+                backgroundColor: activeTab === cat.id ? cat.color : "transparent"
+              }}
             >
-              <cat.icon className="h-4 w-4" />
               {cat.title[lang]}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* List Column */}
-        <div className="w-full lg:w-[60%] space-y-6">
+        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
+          {/* Sticky Map Column - Now on Left for consistency */}
+          <div className="w-full lg:w-[42%] sticky lg:sticky top-[132px] lg:top-[120px] z-30 order-1 lg:order-1 bg-inherit">
+            <div className="h-[250px] md:h-[350px] lg:h-[calc(100vh-220px)] w-full rounded-[1.5rem] lg:rounded-[2.5rem] overflow-hidden border-2 border-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] lg:shadow-[0_20px_40px_rgba(0,0,0,0.12)] relative group">
+              <WeddingMap 
+                compact={true}
+                activeMarkerId={activeItemId}
+                filterTypes={["gastronomy"]}
+                onMarkerClick={handleMarkerClick}
+                offsetX={-60}
+                offsetY={40}
+                customLegend={CATEGORIES.map(c => ({
+                  label: c.title[lang],
+                  color: c.color
+                }))}
+                markerColorOverride={(marker) => {
+                  const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
+                  if (item) {
+                    return CATEGORIES.find(c => c.id === item.category)?.color || "#27AE60";
+                  }
+                  return "#27AE60";
+                }}
+              />
+            </div>
+            {/* Mobile indicator */}
+            <div className="lg:hidden flex justify-center mt-2 mb-1">
+              <div className="w-12 h-1 bg-ink/10 rounded-full" />
+            </div>
+          </div>
+
+        {/* List Column - Now on Right */}
+        <div className="w-full lg:w-[58%] order-2 lg:order-2 space-y-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
+              exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4 }}
               className="grid gap-6"
             >
@@ -470,49 +503,13 @@ export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) 
                   key={item.id} 
                   item={item} 
                   isActive={activeItemId === item.id}
-                  onInView={() => handleItemInView(item.id)}
-                  onClick={() => handleItemClick(item.id, item.coords)}
+                  onClick={() => handleItemClick(item.id)}
                   lang={lang}
+                  color={CATEGORIES.find(c => c.id === item.category)?.color}
                 />
               ))}
             </motion.div>
           </AnimatePresence>
-        </div>
-
-        {/* Sticky Map Column */}
-        <div className="w-full lg:w-[40%]">
-          <div className="lg:sticky lg:top-40 h-[400px] lg:h-[70vh] w-full rounded-[2.5rem] overflow-hidden border border-border shadow-2xl relative">
-            <div ref={mapRef} className="w-full h-full" />
-            
-            {/* Active Item Mini Card on Map */}
-            <AnimatePresence>
-              {activeItem && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  className="absolute bottom-4 left-4 right-4 p-4 bg-white/95 backdrop-blur-md rounded-2xl border border-border shadow-xl flex items-center justify-between"
-                >
-                  <div className="flex-1 min-w-0 pr-4">
-                    <h4 className="font-heading text-lg text-ink truncate leading-tight">
-                      {activeItem.name}
-                    </h4>
-                    <p className="text-xs text-ink/60 truncate mt-1">
-                      {activeItem.tag}
-                    </p>
-                  </div>
-                  <a
-                    href={activeItem.maps}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 bg-ink text-white rounded-xl hover:scale-105 transition-transform shrink-0"
-                  >
-                    <Navigation className="h-4 w-4" />
-                  </a>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
         </div>
       </div>
     </div>
@@ -522,45 +519,42 @@ export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) 
 function GastroCard({ 
   item, 
   isActive, 
-  onInView,
   onClick,
-  lang 
+  lang,
+  color
 }: { 
   item: GastronomyItem; 
   isActive: boolean;
-  onInView: () => void;
   onClick?: () => void;
   lang: Language;
+  color?: string;
 }) {
-  const { ref, inView } = useInView({
-    threshold: 0,
-    rootMargin: "-35% 0px -35% 0px",
-    triggerOnce: false,
-  });
-
-  React.useEffect(() => {
-    if (inView) onInView();
-  }, [inView, onInView]);
-
   return (
     <motion.div
-      ref={ref}
       id={`gastro-${item.id}`}
+      data-gastro-id={item.id}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ 
+        opacity: isActive ? 1 : 0.4, 
+        y: 0,
+        scale: isActive ? 1 : 0.98
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={onClick}
       className={cn(
-        "group relative p-8 rounded-[2rem] border-2 transition-all duration-500 cursor-pointer",
+        "group relative p-8 rounded-[2rem] border-2 transition-all duration-300 cursor-pointer",
         isActive 
-          ? "bg-white border-ink/20 shadow-xl shadow-ink/5 ring-1 ring-ink/5" 
-          : "bg-white/40 border-ink/5 grayscale-[0.3] opacity-70 scale-[0.98] hover:opacity-90 hover:grayscale-0"
+          ? "bg-white border-ink/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] ring-1 ring-ink/5 z-10" 
+          : "bg-white/10 border-ink/5 grayscale-[0.4]"
       )}
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-5">
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
-          <span className="px-3 py-1 bg-ink/5 text-ink/80 rounded-full text-[10px] font-black uppercase tracking-wider border border-ink/10 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-ink/20" />
+          <span 
+            className="px-3 py-1 text-white rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm"
+            style={{ backgroundColor: color }}
+          >
             {item.price}
           </span>
           {item.distinction && (
@@ -569,7 +563,7 @@ function GastroCard({
               {item.distinction}
             </span>
           )}
-          <span className="px-3 py-1 bg-secondary/10 text-secondary-foreground rounded-full text-[10px] font-black uppercase tracking-wider border border-secondary/20">
+          <span className="px-3 py-1 bg-ink/5 text-ink/60 rounded-full text-[10px] font-black uppercase tracking-wider border border-ink/10">
             {item.tag}
           </span>
         </div>
@@ -583,15 +577,33 @@ function GastroCard({
           </p>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-ink/5">
+        {/* Distance Info */}
+        <div className="grid grid-cols-2 gap-4 py-4 border-y border-ink/5 bg-ink/[0.02] -mx-8 px-8">
+            <div className="flex flex-col gap-1">
+              <span className="text-[9px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span>
+              <div className="flex items-center gap-2 text-ink font-bold text-xs">
+                <Landmark className="h-3.5 w-3.5 text-primary" />
+                <span>{item.distanceToSantoDomingo || "–"}</span>
+              </div>
+            </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-[9px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span>
+            <div className="flex items-center gap-2 text-ink font-bold text-xs">
+              <Sparkles className="h-3.5 w-3.5 text-secondary" />
+              <span>{item.distanceToBerriozabal || "–"}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-4">
             <a
               href={item.maps}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs font-bold text-primary hover:underline"
+              className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
             >
-              <MapPin className="h-4 w-4" />
+              <Navigation className="h-4 w-4" />
               {lang === 'es' ? 'Cómo llegar' : 'Get directions'}
             </a>
             {item.instagram && (
@@ -599,7 +611,7 @@ function GastroCard({
                 href={item.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs font-bold text-ink/50 hover:text-ink"
+                className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-ink/30 hover:text-ink transition-colors"
               >
                 <Instagram className="h-4 w-4" />
                 {item.handle}
