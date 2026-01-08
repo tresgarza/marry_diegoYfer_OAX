@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1757478762492,
+      "tag": "0000_freezing_sunset_bain",
+      "breakpoints": true
+    }
+  ]
+}
