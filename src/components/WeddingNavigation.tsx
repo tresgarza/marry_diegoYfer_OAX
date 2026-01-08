@@ -13,6 +13,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet"
 import Image from "next/image"
+import Link from "next/link"
 
 type Lang = "es" | "en"
 
@@ -145,30 +146,49 @@ export default function WeddingNavigation({
 
             {/* Desktop Nav */}
             <ul className="hidden md:flex items-center gap-1">
-              {sections.map((s) => {
-                const isActive = activeId === s.id
-                const isRSVP = s.id === "rsvp"
-                
-                return (
-                  <li key={s.id}>
-                    <a
-                      href={`#${s.id}`}
-                      onClick={(e) => handleAnchorClick(e, s.id)}
-                      className={cn(
-                        "inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
-                        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                        isRSVP 
-                          ? "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 ml-2 px-5" 
-                          : isActive
-                            ? "bg-secondary/20 text-secondary shadow-sm"
-                            : "text-primary-foreground/90 hover:bg-secondary/20 hover:text-primary-foreground",
-                      )}
-                    >
-                      <span className="truncate">{renderLabel(s)}</span>
-                    </a>
-                  </li>
-                )
-              })}
+                {sections.map((s) => {
+                  const isActive = activeId === s.id
+                  const isRSVP = s.id === "rsvp"
+                  const isExternalRoute = s.id === "mapa"
+                  
+                  if (isExternalRoute) {
+                    return (
+                      <li key={s.id}>
+                        <Link
+                          href="/mapa"
+                          className={cn(
+                            "inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                            "text-primary-foreground/90 hover:bg-secondary/20 hover:text-primary-foreground"
+                          )}
+                        >
+                          <span className="truncate">{renderLabel(s)}</span>
+                        </Link>
+                      </li>
+                    )
+                  }
+
+                  return (
+                    <li key={s.id}>
+                      <a
+                        href={`#${s.id}`}
+                        onClick={(e) => handleAnchorClick(e, s.id)}
+                        className={cn(
+                          "inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                          "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          isRSVP 
+                            ? "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 ml-2 px-5" 
+                            : isActive
+                              ? "bg-secondary/20 text-secondary shadow-sm"
+                              : "text-primary-foreground/90 hover:bg-secondary/20 hover:text-primary-foreground",
+                        )}
+                      >
+                        <span className="truncate">{renderLabel(s)}</span>
+                      </a>
+                    </li>
+                  )
+                })}
+
             </ul>
 
 
@@ -196,43 +216,66 @@ export default function WeddingNavigation({
                       {currentLang === "es" ? "Menú" : "Menu"}
                     </SheetTitle>
                   </SheetHeader>
-                    <div className="mt-4 flex flex-col gap-2">
-                      {sections.map((s) => {
-                        const isActive = activeId === s.id
-                        const isRSVP = s.id === "rsvp"
-                        
-                        return (
-                          <SheetClose asChild key={s.id}>
-                            <a
-                              href={`#${s.id}`}
-                              onClick={(e) => handleAnchorClick(e, s.id)}
-                              className={cn(
-                                "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium transition-all",
-                                "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                isRSVP
-                                  ? "bg-secondary text-secondary-foreground shadow-md mt-2"
-                                  : isActive
-                                    ? "bg-secondary/20 text-secondary border border-secondary/20"
-                                    : "text-primary-foreground hover:bg-secondary/10",
-                              )}
-                            >
-                              <span className="min-w-0 truncate">{renderLabel(s)}</span>
-                              {isRSVP ? (
-                                <div className="h-2 w-2 rounded-full bg-secondary-foreground animate-pulse" />
-                              ) : (
-                                <span
+                      <div className="mt-4 flex flex-col gap-2">
+                        {sections.map((s) => {
+                          const isActive = activeId === s.id
+                          const isRSVP = s.id === "rsvp"
+                          const isExternalRoute = s.id === "mapa"
+
+                          if (isExternalRoute) {
+                            return (
+                              <SheetClose asChild key={s.id}>
+                                <Link
+                                  href="/mapa"
                                   className={cn(
-                                    "ml-3 h-1.5 w-1.5 rounded-full",
-                                    isActive ? "bg-secondary" : "bg-primary-foreground/20",
+                                    "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium transition-all",
+                                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                    "text-primary-foreground hover:bg-secondary/10",
                                   )}
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </a>
-                          </SheetClose>
-                        )
-                      })}
-                    </div>
+                                >
+                                  <span className="min-w-0 truncate">{renderLabel(s)}</span>
+                                  <span
+                                    className="ml-3 h-1.5 w-1.5 rounded-full bg-primary-foreground/20"
+                                    aria-hidden="true"
+                                  />
+                                </Link>
+                              </SheetClose>
+                            )
+                          }
+                          
+                          return (
+                            <SheetClose asChild key={s.id}>
+                              <a
+                                href={`#${s.id}`}
+                                onClick={(e) => handleAnchorClick(e, s.id)}
+                                className={cn(
+                                  "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium transition-all",
+                                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                  isRSVP
+                                    ? "bg-secondary text-secondary-foreground shadow-md mt-2"
+                                    : isActive
+                                      ? "bg-secondary/20 text-secondary border border-secondary/20"
+                                      : "text-primary-foreground hover:bg-secondary/10",
+                                )}
+                              >
+                                <span className="min-w-0 truncate">{renderLabel(s)}</span>
+                                {isRSVP ? (
+                                  <div className="h-2 w-2 rounded-full bg-secondary-foreground animate-pulse" />
+                                ) : (
+                                  <span
+                                    className={cn(
+                                      "ml-3 h-1.5 w-1.5 rounded-full",
+                                      isActive ? "bg-secondary" : "bg-primary-foreground/20",
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                )}
+                              </a>
+                            </SheetClose>
+                          )
+                        })}
+                      </div>
+
 
                 </SheetContent>
               </Sheet>

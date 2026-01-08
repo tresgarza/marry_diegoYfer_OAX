@@ -1,11 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { motion } from "framer-motion"
-import { MapPin, Music, Utensils, Sparkles, Navigation, Calendar } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { MapPin, Music, Utensils, Sparkles, Navigation, Calendar, Heart } from "lucide-react"
 import { useInView } from "react-intersection-observer"
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader"
 import { cn } from "@/lib/utils"
+import { WeddingMap } from "./WeddingMap"
 
 type Language = "es" | "en"
 
@@ -62,18 +63,11 @@ const SATURDAY_EVENTS_LIST: ItineraryEvent[] = [
     description: "Acompáñanos a celebrar nuestra unión en una noche llena de alegría, música y amor",
     locationName: "Salón Berriozábal 120",
     coords: { lat: 17.0629, lng: -96.7219 },
-    icon: <HeartIcon className="h-5 w-5" />,
+    icon: <Heart className="h-5 w-5" />,
   },
 ]
 
 const ALL_EVENTS = [...FRIDAY_EVENTS, ...SATURDAY_EVENTS_LIST]
-
-const EVENT_ICONS: { [key: string]: string } = {
-  calenda: "🎶",
-  rompehielos: "🥂",
-  ceremonia: "⛪",
-  recepcion: "✨",
-}
 
 const COLORS = {
   primary: "#C66B3D",
@@ -81,252 +75,132 @@ const COLORS = {
   inactive: "#9CA3AF",
 }
 
-function HeartIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>
-  )
-}
-
 export default function WeddingItinerary({ language = "es" }: { language?: Language }) {
-  const [map, setMap] = React.useState<google.maps.Map | null>(null)
   const [activeEventId, setActiveEventId] = React.useState<string>(ALL_EVENTS[0].id)
-  const mapRef = React.useRef<HTMLDivElement>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const markersRef = React.useRef<{ [key: string]: google.maps.Marker }>({})
-
-  React.useEffect(() => {
-    const initMap = async () => {
-      try {
-        setOptions({
-          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-          v: "weekly",
-        })
-
-        const { Map } = await importLibrary("maps")
-        
-        if (mapRef.current && !map) {
-          const newMap = new Map(mapRef.current, {
-            center: ALL_EVENTS[0].coords,
-            zoom: 16,
-            styles: MAP_STYLE,
-            disableDefaultUI: true,
-            zoomControl: true,
-          })
-
-          const bounds = new google.maps.LatLngBounds()
-
-            ALL_EVENTS.forEach((event) => {
-              const marker = new google.maps.Marker({
-                position: event.coords,
-                map: newMap,
-                title: event.title,
-                zIndex: event.id === activeEventId ? 1000 : 1,
-                label: event.id === activeEventId ? {
-                  text: EVENT_ICONS[event.id] || "📍",
-                  fontSize: "12px",
-                  color: "white"
-                } : undefined,
-                icon: {
-                  path: google.maps.SymbolPath.CIRCLE,
-                  fillColor: event.dayKey === "saturday" ? COLORS.secondary : COLORS.primary,
-                  fillOpacity: 1,
-                  strokeWeight: 3,
-                  strokeColor: "#FFFFFF",
-                  scale: event.id === activeEventId ? 15 : 10,
-                  labelOrigin: new google.maps.Point(0, 0),
-                },
-              })
-              markersRef.current[event.id] = marker
-              bounds.extend(event.coords)
-            })
-
-          newMap.fitBounds(bounds)
-          
-          const listener = google.maps.event.addListener(newMap, "idle", () => {
-            if (newMap.getZoom()! > 17) newMap.setZoom(17)
-            google.maps.event.removeListener(listener)
-          })
-
-          setMap(newMap)
-        }
-      } catch (error) {
-        console.error("Error loading Google Maps:", error)
-      }
-    }
-
-    initMap()
-  }, [map])
-
-    React.useEffect(() => {
-      if (!map) return
-  
-      ALL_EVENTS.forEach((event) => {
-        const marker = markersRef.current[event.id]
-        if (marker) {
-          const isActive = event.id === activeEventId
-          marker.setIcon({
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: event.dayKey === "saturday" ? COLORS.secondary : COLORS.primary,
-            fillOpacity: 1,
-            strokeWeight: 3,
-            strokeColor: "#FFFFFF",
-            scale: isActive ? 15 : 10,
-            labelOrigin: new google.maps.Point(0, 0),
-          })
-          marker.setLabel(isActive ? {
-            text: EVENT_ICONS[event.id] || "📍",
-            fontSize: "12px",
-            color: "white"
-          } : undefined)
-          
-          if (isActive) {
-            marker.setZIndex(1000)
-            map.panTo(event.coords)
-          } else {
-            marker.setZIndex(1)
-          }
-        }
-      })
-    }, [activeEventId, map])
 
   const handleEventInView = React.useCallback((id: string) => {
     setActiveEventId(id)
   }, [])
 
-  const handleItemClick = (id: string, coords: { lat: number; lng: number }) => {
+  const handleItemClick = (id: string) => {
     setActiveEventId(id)
     const element = document.getElementById(`itinerary-${id}`)
     if (element) {
-      const elementRect = element.getBoundingClientRect()
-      const absoluteElementTop = elementRect.top + window.pageYOffset
-      const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2)
-      window.scrollTo({
-        top: middle,
-        behavior: "smooth"
-      })
-    }
-    if (map) {
-      map.panTo(coords)
-      map.setZoom(17)
+      element.scrollIntoView({ behavior: "smooth", block: "center" })
     }
   }
 
   const activeEvent = ALL_EVENTS.find(e => e.id === activeEventId)
 
+  const ITINERARY_LEGEND = [
+    { label: "Templo de Santo Domingo", color: "#C66B3D", emoji: "⛪" },
+    { label: "Salón Berriozabal 120", color: "#C66B3D", emoji: "✨" },
+    { label: "Restaurante Catedral", color: "#C66B3D", emoji: "🥂" },
+  ];
+
   return (
     <div ref={containerRef} className="relative w-full">
-      <div className="flex flex-col lg:flex-row gap-12">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
         
-        {/* Timeline Column */}
-        <div className="w-full lg:w-[55%]">
-          
-          {/* VIERNES 11 */}
-          <div>
-            <DayHeader 
-              dayNumber="11" 
-              dayName="Viernes" 
-              monthYear="Septiembre 2026" 
-            />
-            <div className="relative mt-12 px-4 pb-24">
-              <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/30 to-primary/20 lg:-translate-x-1/2" />
-              
-              <div className="space-y-16 lg:space-y-24">
-                {FRIDAY_EVENTS.map((event, index) => (
-                  <TimelineItem 
-                    key={event.id}
-                    event={event}
-                    index={index}
-                    onInView={handleEventInView}
-                    onClick={() => handleItemClick(event.id, event.coords)}
-                    isActive={activeEventId === event.id}
-                    alignment={index % 2 === 0 ? "left" : "right"}
-                  />
-                ))}
+          {/* Timeline Column */}
+          <div className="w-full lg:w-[55%] space-y-6 lg:space-y-12">
+            
+            {/* VIERNES 11 */}
+            <div className="space-y-4 lg:space-y-8">
+              <DayHeader 
+                dayNumber="11" 
+                dayName="Viernes" 
+                monthYear="Septiembre 2026" 
+              />
+              <div className="relative pl-6 lg:pl-0">
+                <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/30 to-primary/20 lg:-translate-x-1/2" />
+                
+                <div className="space-y-8 lg:space-y-20">
+                  {FRIDAY_EVENTS.map((event, index) => (
+                    <TimelineItem 
+                      key={event.id}
+                      event={event}
+                      index={index}
+                      onInView={handleEventInView}
+                      onClick={() => handleItemClick(event.id)}
+                      isActive={activeEventId === event.id}
+                      alignment={index % 2 === 0 ? "left" : "right"}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* SÁBADO 12 */}
+            <div className="space-y-4 lg:space-y-8">
+              <DayHeader 
+                dayNumber="12" 
+                dayName="Sábado" 
+                monthYear="Septiembre 2026" 
+              />
+              <div className="relative pl-6 lg:pl-0">
+                <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/30 to-transparent lg:-translate-x-1/2" />
+                
+                <div className="space-y-8 lg:space-y-20">
+                  {SATURDAY_EVENTS_LIST.map((event, index) => (
+                    <TimelineItem 
+                      key={event.id}
+                      event={event}
+                      index={index + FRIDAY_EVENTS.length}
+                      onInView={handleEventInView}
+                      onClick={() => handleItemClick(event.id)}
+                      isActive={activeEventId === event.id}
+                      alignment={index % 2 === 0 ? "left" : "right"}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* SÁBADO 12 */}
-          <div className="mt-12">
-            <DayHeader 
-              dayNumber="12" 
-              dayName="Sábado" 
-              monthYear="Septiembre 2026" 
+        {/* Sticky Map Column (Desktop Only) */}
+        <div className="hidden lg:block w-full lg:w-[45%] lg:sticky top-40 h-[600px] z-30">
+          <div className="h-full w-full rounded-[2rem] overflow-hidden border border-border bg-muted shadow-2xl relative">
+            <WeddingMap 
+              compact={true}
+              activeMarkerId={activeEventId}
+              filterTypes={["event"]}
+              onMarkerClick={(m) => handleItemClick(m.id)}
+              customLegend={ITINERARY_LEGEND}
             />
-            <div className="relative mt-12 px-4 pb-12">
-              <div className="absolute left-6 lg:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/60 via-primary/30 to-transparent lg:-translate-x-1/2" />
-              
-              <div className="space-y-16 lg:space-y-24">
-                {SATURDAY_EVENTS_LIST.map((event, index) => (
-                  <TimelineItem 
-                    key={event.id}
-                    event={event}
-                    index={index + FRIDAY_EVENTS.length}
-                    onInView={handleEventInView}
-                    onClick={() => handleItemClick(event.id, event.coords)}
-                    isActive={activeEventId === event.id}
-                    alignment={index % 2 === 0 ? "left" : "right"}
-                  />
-                ))}
+            
+            <div className="absolute bottom-6 left-6 right-6 p-5 bg-white/95 backdrop-blur-md rounded-2xl border border-border shadow-xl">
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "p-3 rounded-xl",
+                  activeEvent?.dayKey === "saturday" ? "bg-secondary/20 text-secondary" : "bg-primary/20 text-primary"
+                )}>
+                  {activeEvent?.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={cn(
+                    "text-[11px] font-bold uppercase tracking-[0.15em]",
+                    activeEvent?.dayKey === "saturday" ? "text-secondary" : "text-primary"
+                  )}>
+                    {activeEvent?.dayKey === "saturday" ? "Sábado 12" : "Viernes 11"} · {activeEvent?.time}
+                  </p>
+                  <h4 className="font-heading text-lg text-foreground truncate">
+                    {activeEvent?.locationName}
+                  </h4>
+                </div>
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${activeEvent?.coords.lat},${activeEvent?.coords.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 bg-foreground text-background rounded-xl hover:scale-105 transition-transform shrink-0"
+                >
+                  <Navigation className="h-5 w-5" />
+                </a>
               </div>
             </div>
           </div>
         </div>
-
-          {/* Sticky Map Column */}
-          <div className="w-full lg:w-[45%] sticky lg:sticky top-[68px] lg:top-40 z-30 order-1 lg:order-2 bg-inherit">
-            <div className="h-[250px] md:h-[400px] lg:h-[80vh] w-full rounded-[1.5rem] lg:rounded-[2rem] overflow-hidden border border-border bg-muted shadow-xl lg:shadow-2xl">
-              <div ref={mapRef} className="w-full h-full" />
-              
-              <div className="absolute bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 p-4 lg:p-5 bg-white/95 backdrop-blur-md rounded-xl lg:rounded-2xl border border-border shadow-xl">
-                <div className="flex items-center gap-3 lg:gap-4">
-                  <div className={cn(
-                    "p-2.5 lg:p-3 rounded-lg lg:rounded-xl",
-                    activeEvent?.dayKey === "saturday" ? "bg-secondary/20 text-secondary" : "bg-primary/20 text-primary"
-                  )}>
-                    {activeEvent?.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className={cn(
-                      "text-[9px] lg:text-[11px] font-bold uppercase tracking-[0.15em]",
-                      activeEvent?.dayKey === "saturday" ? "text-secondary" : "text-primary"
-                    )}>
-                      {activeEvent?.dayKey === "saturday" ? "Sábado 12" : "Viernes 11"} · {activeEvent?.time}
-                    </p>
-                    <h4 className="font-heading text-base lg:text-lg text-foreground truncate">
-                      {activeEvent?.locationName}
-                    </h4>
-                  </div>
-                  <a
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${activeEvent?.coords.lat},${activeEvent?.coords.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2.5 lg:p-3 bg-foreground text-background rounded-lg lg:rounded-xl hover:scale-105 transition-transform shrink-0"
-                    title="Abrir en Google Maps"
-                  >
-                    <Navigation className="h-4 w-4 lg:h-5 lg:w-5" />
-                  </a>
-                </div>
-              </div>
-            </div>
-            {/* Mobile indicator */}
-            <div className="lg:hidden flex justify-center mt-2 mb-4">
-              <div className="w-12 h-1 bg-ink/10 rounded-full" />
-            </div>
-          </div>
       </div>
     </div>
   )
@@ -346,22 +220,22 @@ function DayHeader({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="relative p-8 rounded-[2rem] border-2 overflow-hidden bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/30"
+      className="relative p-4 lg:p-8 rounded-2xl lg:rounded-[2rem] border-2 overflow-hidden bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/30"
     >
-      <div className="flex items-center gap-6">
-        <div className="flex items-center justify-center w-24 h-24 rounded-2xl font-heading text-5xl font-bold shadow-lg bg-primary text-primary-foreground">
+      <div className="flex items-center gap-4 lg:gap-6">
+        <div className="flex items-center justify-center w-14 h-14 lg:w-20 lg:h-20 rounded-2xl font-heading text-2xl lg:text-4xl font-bold shadow-lg bg-primary text-primary-foreground">
           {dayNumber}
         </div>
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.25em] mb-1 text-primary">
+          <p className="text-[9px] lg:text-xs font-bold uppercase tracking-[0.25em] mb-1 text-primary">
             {monthYear}
           </p>
-          <h3 className="font-heading text-4xl text-foreground">
+          <h3 className="font-heading text-[20px] lg:text-3xl text-foreground">
             {dayName}
           </h3>
         </div>
       </div>
-      <Calendar className="absolute -right-6 -bottom-6 h-40 w-40 opacity-[0.05] text-primary" />
+      <Calendar className="absolute -right-6 -bottom-6 h-32 w-32 opacity-[0.05] text-primary" />
     </motion.div>
   )
 }
@@ -383,7 +257,7 @@ function TimelineItem({
 }) {
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: "-35% 0px -35% 0px",
+    rootMargin: "-40% 0px -40% 0px",
     triggerOnce: false,
   })
 
@@ -399,10 +273,10 @@ function TimelineItem({
     <motion.div 
       ref={ref}
       id={`itinerary-${event.id}`}
-      initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
+      initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
       onClick={onClick}
       className={cn(
         "relative flex flex-col items-start lg:items-center cursor-pointer",
@@ -411,94 +285,100 @@ function TimelineItem({
     >
       {/* Timeline Dot */}
       <div className={cn(
-        "absolute left-6 lg:left-1/2 top-6 w-6 h-6 rounded-full border-4 border-background z-20 transition-all duration-500 lg:-translate-x-1/2",
+        "absolute left-6 lg:left-1/2 top-8 w-4 h-4 rounded-full border-2 border-background z-20 transition-all duration-500 lg:-translate-x-1/2",
         isActive 
-          ? "bg-primary scale-150 shadow-xl shadow-primary/40"
+          ? "bg-primary scale-150 shadow-lg shadow-primary/40"
           : "bg-muted-foreground/40"
       )} />
 
-      {/* Spacer for alternating layout */}
+      {/* Spacer for desktop alternating */}
       <div className="hidden lg:block lg:w-1/2" />
 
       {/* Content Card */}
       <div className={cn(
-        "w-full lg:w-1/2 pl-16 lg:pl-0 lg:px-8",
+        "w-full lg:w-1/2 pl-12 lg:pl-0 lg:px-8 max-w-[360px] mx-auto lg:max-w-none",
         isLeft ? "lg:text-right" : "lg:text-left"
       )}>
+        <div className={cn(
+          "p-4 lg:p-6 rounded-2xl lg:rounded-[2rem] border transition-all duration-500",
+          isActive 
+            ? "bg-white border-primary/40 shadow-xl scale-[1.02]"
+            : "bg-card/40 border-border/50 opacity-60 grayscale-[0.5]"
+        )}>
           <div className={cn(
-            "p-8 rounded-[2rem] border transition-all duration-700",
-            isActive 
-              ? "bg-white border-primary/50 shadow-2xl shadow-primary/20 scale-[1.02] ring-1 ring-primary/20"
-              : "bg-card/40 border-border/50 opacity-60 grayscale-[0.5] hover:opacity-80"
-          )}>
-          <div className={cn(
-            "flex items-start gap-4 mb-4",
+            "flex items-center gap-3 mb-2 lg:mb-4",
             isLeft ? "lg:flex-row-reverse" : "lg:flex-row",
             "justify-between"
           )}>
             <span className={cn(
-              "text-sm font-black px-4 py-1.5 rounded-full",
-              isActive 
-                ? "bg-primary/20 text-primary"
-                : "bg-muted text-muted-foreground"
+              "text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider",
+              isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
             )}>
               {event.time}
             </span>
             <div className={cn(
-              "p-3 rounded-2xl transition-all duration-500",
-              isActive 
-                ? "bg-primary text-primary-foreground -rotate-12"
-                : "bg-muted text-muted-foreground"
+              "p-1.5 lg:p-2 rounded-xl transition-colors",
+              isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
             )}>
               {event.icon}
             </div>
           </div>
 
-          <h4 className="font-heading text-2xl text-foreground mb-3">{event.title}</h4>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-medium">
+          <h4 className="font-heading text-[18px] lg:text-xl text-foreground mb-1 lg:mb-2">{event.title}</h4>
+          <p className={cn(
+            "text-[13px] lg:text-sm text-muted-foreground leading-relaxed mb-3 lg:mb-4 transition-all duration-300",
+            !isActive && "lg:line-clamp-none line-clamp-2"
+          )}>
             {event.description}
           </p>
 
           <div className={cn(
-            "flex items-center gap-2 text-sm font-bold pt-4 border-t",
+            "flex items-center gap-2 text-[11px] lg:text-xs font-bold pt-3 lg:pt-4 border-t uppercase tracking-wider",
             isLeft ? "lg:justify-end" : "lg:justify-start",
-            isActive 
-              ? "text-primary border-primary/20"
-              : "text-foreground/60 border-border/50"
+            isActive ? "text-primary border-primary/10" : "text-foreground/40 border-border/50"
           )}>
-            <MapPin className="h-4 w-4" />
+            <MapPin className="h-3.5 w-3.5" />
             {event.locationName}
           </div>
+
+          {/* Interactive Mobile Map & Expanded Info */}
+          <AnimatePresence>
+            {isActive && (
+              <motion.div
+                initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                animate={{ height: "auto", opacity: 1, marginTop: 12 }}
+                exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                className="lg:hidden w-full space-y-4"
+              >
+                <div 
+                  className="w-full h-[120px] rounded-xl overflow-hidden border border-border shadow-inner relative pointer-events-none"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <WeddingMap 
+                    compact={true}
+                    activeMarkerId={event.id}
+                    filterTypes={["event"]}
+                    hideUI={true}
+                    hideLegend={true}
+                  />
+                  <div className="absolute top-2 right-2 flex flex-col gap-2 pointer-events-auto">
+                     <a 
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${event.coords.lat},${event.coords.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm text-primary"
+                    >
+                      <Navigation className="h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+
+
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.div>
   )
 }
-
-const MAP_STYLE = [
-  {
-    "featureType": "administrative",
-    "elementType": "labels.text.fill",
-    "stylers": [{ "color": "#444444" }]
-  },
-  {
-    "featureType": "landscape",
-    "elementType": "all",
-    "stylers": [{ "color": "#f2f2f2" }]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "all",
-    "stylers": [{ "visibility": "off" }]
-  },
-  {
-    "featureType": "road",
-    "elementType": "all",
-    "stylers": [{ "saturation": -100 }, { "lightness": 45 }]
-  },
-  {
-    "featureType": "water",
-    "elementType": "all",
-    "stylers": [{ "color": "#cad2c5" }, { "visibility": "on" }]
-  }
-]

@@ -75,8 +75,8 @@ export default function Page() {
               deadline: "12 de Agosto",
               contact: "Karla",
               coords: { lat: 17.0706, lng: -96.7208 },
-              distanceToVenue: "0.8 km",
-              durationToVenue: "11 mins"
+              durationToChurch: "11 mins",
+              durationToParty: "11 mins"
             },
             {
               name: "Holiday Inn Express",
@@ -91,8 +91,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Directo en el link",
               coords: { lat: 17.0706, lng: -96.7231 },
-              distanceToVenue: "0.5 km",
-              durationToVenue: "7 mins"
+              durationToChurch: "7 mins",
+              durationToParty: "13 mins"
             },
             {
               name: "Hotel Boutique de la Parra",
@@ -107,8 +107,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Daniela",
               coords: { lat: 17.0594, lng: -96.7234 },
-              distanceToVenue: "0.9 km",
-              durationToVenue: "13 mins"
+              durationToChurch: "13 mins",
+              durationToParty: "6 mins"
             },
             {
               name: "Suites de la Parra",
@@ -123,8 +123,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Paola",
               coords: { lat: 17.0592, lng: -96.7247 },
-              distanceToVenue: "0.9 km",
-              durationToVenue: "14 mins"
+              durationToChurch: "14 mins",
+              durationToParty: "9 mins"
             },
             {
               name: "Majagua",
@@ -139,8 +139,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Blanca",
               coords: { lat: 17.0673, lng: -96.7214 },
-              distanceToVenue: "0.4 km",
-              durationToVenue: "6 mins"
+              durationToChurch: "6 mins",
+              durationToParty: "6 mins"
             },
             {
               name: "Naura",
@@ -154,8 +154,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Maricruz",
               coords: { lat: 17.0603, lng: -96.7196 },
-              distanceToVenue: "1.0 km",
-              durationToVenue: "16 mins"
+              durationToChurch: "16 mins",
+              durationToParty: "8 mins"
             },
             {
               name: "Hotel Abu",
@@ -169,8 +169,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Jorge",
               coords: { lat: 17.0641, lng: -96.7248 },
-              distanceToVenue: "0.4 km",
-              durationToVenue: "6 mins"
+              durationToChurch: "6 mins",
+              durationToParty: "4 mins"
             },
             {
               name: "Hotel City Centro",
@@ -184,8 +184,8 @@ export default function Page() {
               deadline: "Bloqueo Abierto",
               contact: "Rocio",
               coords: { lat: 17.0675, lng: -96.7139 },
-              distanceToVenue: "1.5 km",
-              durationToVenue: "20 mins"
+              durationToChurch: "20 mins",
+              durationToParty: "20 mins"
             },
           ]}
         />

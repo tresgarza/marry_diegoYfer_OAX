@@ -2,7 +2,23 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Instagram, Coffee, UtensilsCrossed, Martini, MapPin, Award, Navigation, ChevronRight, Star, Sparkles, Landmark } from "lucide-react";
+import Link from "next/link";
+import { 
+  Instagram, 
+  Coffee, 
+  UtensilsCrossed, 
+  Martini, 
+  MapPin, 
+  Award, 
+  Navigation, 
+  ChevronRight, 
+  Star, 
+  Sparkles, 
+  Landmark,
+  Map as MapIcon,
+  X,
+  Maximize2
+} from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 import { WeddingMap } from "./WeddingMap";
@@ -228,7 +244,7 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@criollo_oax",
     instagram: "https://www.instagram.com/criollo_oax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Criollo%20Restaurante%20Oaxaca",
-    coords: { lat: 17.0630, lng: -96.7370 },
+    coords: { lat: 17.0630, lng: -93.7370 },
     distanceToSantoDomingo: "1.5 km",
     distanceToBerriozabal: "1.7 km"
   },
@@ -339,131 +355,150 @@ const CATEGORIES: { id: CategoryId; title: { es: string; en: string }; color: st
   { id: "drinks", title: { es: "Drinks", en: "Drinks" }, color: "#5B21B6" },
 ];
 
-export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) {
-  const [activeTab, setActiveTab] = React.useState<CategoryId>(CATEGORIES[0].id);
-  const [activeItemId, setActiveItemId] = React.useState<string>(GASTRO_DATA[0].id);
-  const [isLocked, setIsLocked] = React.useState(false);
-  const sectionRef = React.useRef<HTMLDivElement>(null);
-  const lockTimerRef = React.useRef<NodeJS.Timeout | null>(null);
-  const observerRef = React.useRef<IntersectionObserver | null>(null);
+  export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) {
+    const [activeTab, setActiveTab] = React.useState<CategoryId>(CATEGORIES[0].id);
+    const [activeItemId, setActiveItemId] = React.useState<string | null>(null);
 
-  const lockObserver = (ms = 800) => {
-    setIsLocked(true);
-    if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
-    lockTimerRef.current = setTimeout(() => setIsLocked(false), ms);
-  };
+    React.useEffect(() => {
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+        const firstItem = GASTRO_DATA.find(i => i.category === activeTab);
+        if (firstItem) setActiveItemId(firstItem.id);
+      }
+    }, [activeTab]);
 
-  const filteredItems = GASTRO_DATA.filter(item => item.category === activeTab);
+    const [isLocked, setIsLocked] = React.useState(false);
+    const sectionRef = React.useRef<HTMLDivElement>(null);
+    const lockTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+    const observerRef = React.useRef<IntersectionObserver | null>(null);
 
-  const activeItemIdRef = React.useRef(activeItemId);
-  const lastUpdateRef = React.useRef(Date.now());
+    const lockObserver = (ms = 800) => {
+      setIsLocked(true);
+      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+      lockTimerRef.current = setTimeout(() => setIsLocked(false), ms);
+    };
 
-  React.useEffect(() => {
-    activeItemIdRef.current = activeItemId;
-  }, [activeItemId]);
+    const filteredItems = GASTRO_DATA.filter(item => item.category === activeTab);
 
-  React.useEffect(() => {
-    const callback = (entries: IntersectionObserverEntry[]) => {
-      // If locked or updated too recently, skip
-      if (isLocked || Date.now() - lastUpdateRef.current < 100) return;
+    const activeItemIdRef = React.useRef(activeItemId);
+    const lastUpdateRef = React.useRef(Date.now());
 
-      // Find the best candidate: must be intersecting and have the highest ratio
-      let bestCandidate: { id: string, ratio: number } | null = null;
-      
-      entries.forEach(entry => {
-        const itemId = entry.target.getAttribute('data-gastro-id');
-        if (itemId && entry.isIntersecting) {
-          if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
-            bestCandidate = { id: itemId, ratio: entry.intersectionRatio };
+    React.useEffect(() => {
+      activeItemIdRef.current = activeItemId;
+    }, [activeItemId]);
+
+    React.useEffect(() => {
+      const callback = (entries: IntersectionObserverEntry[]) => {
+        if (isLocked || Date.now() - lastUpdateRef.current < 100) return;
+        
+        // Disable auto-open on mobile
+        if (window.innerWidth < 1024) return;
+
+        let bestCandidate: { id: string, ratio: number } | null = null;
+        
+        entries.forEach(entry => {
+          const itemId = entry.target.getAttribute('data-gastro-id');
+          if (itemId && entry.isIntersecting) {
+            if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
+              bestCandidate = { id: itemId, ratio: entry.intersectionRatio };
+            }
+          }
+        });
+
+        if (bestCandidate && bestCandidate.id !== activeItemIdRef.current) {
+          if (bestCandidate.ratio > 0.4) {
+            setActiveItemId(bestCandidate.id);
+            lastUpdateRef.current = Date.now();
           }
         }
+      };
+
+      observerRef.current = new IntersectionObserver(callback, {
+        threshold: [0.2, 0.4, 0.6, 0.8],
+        rootMargin: "-30% 0px -30% 0px"
       });
 
-      // Threshold: only update if the best candidate is significantly visible
-      // and it's different from the current active item
-      if (bestCandidate && bestCandidate.id !== activeItemIdRef.current) {
-        if (bestCandidate.ratio > 0.4) {
-          setActiveItemId(bestCandidate.id);
-          lastUpdateRef.current = Date.now();
+      const currentObserver = observerRef.current;
+      const cards = document.querySelectorAll('[data-gastro-id]');
+      cards.forEach(card => currentObserver.observe(card));
+
+      return () => currentObserver.disconnect();
+    }, [isLocked, activeTab]);
+
+    const handleTabChange = (catId: CategoryId) => {
+      lockObserver(1500);
+      setActiveTab(catId);
+      
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+        const firstItem = GASTRO_DATA.find(i => i.category === catId);
+        if (firstItem) setActiveItemId(firstItem.id);
+      } else {
+        setActiveItemId(null);
+      }
+      
+      if (sectionRef.current) {
+        sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+
+    const handleItemClick = (id: string) => {
+      lockObserver(1000);
+      setActiveItemId(prev => {
+        if (window.innerWidth < 1024) {
+          return prev === id ? null : id;
+        }
+        return id;
+      });
+
+      if (window.innerWidth < 1024) {
+        const element = document.getElementById(`gastro-${id}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
     };
 
-    observerRef.current = new IntersectionObserver(callback, {
-      threshold: [0.2, 0.4, 0.6, 0.8],
-      rootMargin: "-30% 0px -30% 0px" // Tighter band to prevent overlap triggers
-    });
-
-
-    const currentObserver = observerRef.current;
-    const cards = document.querySelectorAll('[data-gastro-id]');
-    cards.forEach(card => currentObserver.observe(card));
-
-    return () => currentObserver.disconnect();
-  }, [isLocked, activeTab]);
-
-  const handleTabChange = (catId: CategoryId) => {
-    lockObserver(1500);
-    setActiveTab(catId);
-    const firstItem = GASTRO_DATA.find(i => i.category === catId);
-    if (firstItem) setActiveItemId(firstItem.id);
-    
-    if (sectionRef.current) {
-      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
-  const handleItemClick = (id: string) => {
-    lockObserver(1000);
-    setActiveItemId(id);
-    const element = document.getElementById(`gastro-${id}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  };
-
-  const handleMarkerClick = (marker: any) => {
-    const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
-    if (item) {
-      if (item.category !== activeTab) {
-        setActiveTab(item.category as CategoryId);
+    const handleMarkerClick = (marker: any) => {
+      const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
+      if (item) {
+        if (item.category !== activeTab) {
+          setActiveTab(item.category as CategoryId);
+        }
+        handleItemClick(item.id);
       }
-      handleItemClick(item.id);
-    }
-  };
+    };
 
-  return (
-    <div ref={sectionRef} className="w-full">
-      {/* Category Tabs */}
-      <div className="flex justify-center mb-12 sticky top-16 md:top-20 z-40 py-4">
-        <div className="inline-flex p-1.5 bg-white/80 backdrop-blur-md rounded-full border border-ink/10 shadow-lg">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => handleTabChange(cat.id)}
-              className={cn(
-                "flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-black transition-all duration-300",
-                activeTab === cat.id
-                  ? "text-white shadow-lg"
-                  : "text-ink/60 hover:text-ink hover:bg-white/50"
-              )}
-              style={{
-                backgroundColor: activeTab === cat.id ? cat.color : "transparent"
-              }}
-            >
-              {cat.title[lang]}
-            </button>
-          ))}
+    return (
+      <div ref={sectionRef} className="w-full">
+        {/* Category Tabs */}
+        <div className="flex justify-center mb-6 lg:mb-12 sticky top-16 md:top-20 z-40 py-4">
+          <div className="inline-flex p-1.5 bg-white/80 backdrop-blur-md rounded-full border border-ink/10 shadow-lg">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => handleTabChange(cat.id)}
+                className={cn(
+                  "flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full text-[12px] lg:text-sm font-black transition-all duration-300 whitespace-nowrap",
+                  activeTab === cat.id
+                    ? "text-white shadow-lg"
+                    : "text-ink/60 hover:text-ink hover:bg-white/50"
+                )}
+                style={{
+                  backgroundColor: activeTab === cat.id ? cat.color : "transparent"
+                }}
+              >
+                {cat.title[lang]}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
-          {/* Sticky Map Column - Now on Left for consistency */}
-          <div className="w-full lg:w-[42%] sticky lg:sticky top-[132px] lg:top-[120px] z-30 order-1 lg:order-1 bg-inherit">
-            <div className="h-[250px] md:h-[350px] lg:h-[calc(100vh-220px)] w-full rounded-[1.5rem] lg:rounded-[2.5rem] overflow-hidden border-2 border-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] lg:shadow-[0_20px_40px_rgba(0,0,0,0.12)] relative group">
+          {/* Sticky Map Column (Desktop Only) */}
+          <div className="hidden lg:block w-[42%] sticky top-[120px] z-30">
+            <div className="h-[500px] w-full rounded-[2.5rem] overflow-hidden border-2 border-white shadow-[0_20px_40px_rgba(0,0,0,0.12)] relative group">
               <WeddingMap 
                 compact={true}
-                activeMarkerId={activeItemId}
+                activeMarkerId={activeItemId || undefined}
                 filterTypes={["gastronomy"]}
                 onMarkerClick={handleMarkerClick}
                 offsetX={-60}
@@ -480,52 +515,60 @@ export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) 
                   return "#27AE60";
                 }}
               />
-            </div>
-            {/* Mobile indicator */}
-            <div className="lg:hidden flex justify-center mt-2 mb-1">
-              <div className="w-12 h-1 bg-ink/10 rounded-full" />
+              <div className="absolute top-4 right-4 z-50">
+                <Link
+                  href="/mapa"
+                  className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm hover:bg-white text-ink rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg border border-ink/5 group"
+                >
+                  <Maximize2 className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+                  <span>Ver mapa completo</span>
+                </Link>
+              </div>
             </div>
           </div>
 
-        {/* List Column - Now on Right */}
-        <div className="w-full lg:w-[58%] order-2 lg:order-2 space-y-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.4 }}
-              className="grid gap-6"
-            >
-              {filteredItems.map((item) => (
-                <GastroCard 
-                  key={item.id} 
-                  item={item} 
-                  isActive={activeItemId === item.id}
-                  onClick={() => handleItemClick(item.id)}
-                  lang={lang}
-                  color={CATEGORIES.find(c => c.id === item.category)?.color}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          {/* List Column */}
+          <div className="w-full lg:w-[58%] space-y-6">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.4 }}
+                className="grid gap-6"
+              >
+                {filteredItems.map((item) => (
+                  <GastroCard 
+                    key={item.id} 
+                    item={item} 
+                    isActive={activeItemId === item.id}
+                    onClick={() => handleItemClick(item.id)}
+                    onMarkerClick={handleMarkerClick}
+                    lang={lang}
+                    color={CATEGORIES.find(c => c.id === item.category)?.color}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 function GastroCard({ 
   item, 
   isActive, 
   onClick,
+  onMarkerClick,
   lang,
   color
 }: { 
   item: GastronomyItem; 
   isActive: boolean;
   onClick?: () => void;
+  onMarkerClick?: (marker: any) => void;
   lang: Language;
   color?: string;
 }) {
@@ -535,103 +578,224 @@ function GastroCard({
       data-gastro-id={item.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ 
-        opacity: isActive ? 1 : 0.4, 
-        y: 0,
-        scale: isActive ? 1 : 0.98
+        opacity: 1, 
+        scale: 1,
+        y: 0 
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={onClick}
       className={cn(
-        "group relative p-8 rounded-[2rem] border-2 transition-all duration-300 cursor-pointer",
+        "relative w-full max-w-[360px] mx-auto lg:max-w-none bg-white rounded-2xl lg:rounded-[2rem] overflow-hidden transition-all duration-300 cursor-pointer border-2",
         isActive 
-          ? "bg-white border-ink/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] ring-1 ring-ink/5 z-10" 
-          : "bg-white/10 border-ink/5 grayscale-[0.4]"
+          ? "shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-neutral-200 z-10" 
+          : "shadow-none border-neutral-100 hover:bg-neutral-50/50"
       )}
     >
-      <div className="flex flex-col gap-5">
-        {/* Badges */}
-        <div className="flex flex-wrap gap-2">
-          <span 
-            className="px-3 py-1 text-white rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm"
-            style={{ backgroundColor: color }}
-          >
-            {item.price}
-          </span>
-          {item.distinction && (
-            <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-black uppercase tracking-wider border border-primary/20 flex items-center gap-1.5">
-              <Star className="h-3 w-3 fill-current" />
-              {item.distinction}
-            </span>
-          )}
-          <span className="px-3 py-1 bg-ink/5 text-ink/60 rounded-full text-[10px] font-black uppercase tracking-wider border border-ink/10">
-            {item.tag}
-          </span>
+      <div className="p-4 lg:p-8 flex flex-col gap-3 lg:gap-5">
+        {/* Header Section */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            <h4 className="font-heading text-[18px] lg:text-2xl text-ink leading-tight group-hover:text-primary transition-colors">
+              {item.name}
+            </h4>
+            {/* Badges */}
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              <span 
+                className="px-2 lg:px-3 py-0.5 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest text-white shadow-sm"
+                style={{ backgroundColor: color }}
+              >
+                {item.price}
+              </span>
+              {item.distinction && (
+                <span className="px-2 lg:px-3 py-0.5 bg-primary/10 text-primary rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest border border-primary/20 flex items-center gap-1">
+                  <Star className="h-2.5 w-2.5 fill-current" />
+                  {item.distinction}
+                </span>
+              )}
+              <span className="px-2 lg:px-3 py-0.5 bg-neutral-100 text-ink/40 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest border border-neutral-200">
+                {item.tag}
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h4 className="font-heading text-2xl text-ink mb-2 group-hover:text-primary transition-colors">
-            {item.name}
-          </h4>
-          <p className="text-sm text-ink/70 leading-relaxed font-medium line-clamp-2 lg:line-clamp-none">
+        <div className="bg-neutral-50 p-3 lg:p-4 rounded-2xl border border-neutral-100">
+          <p className={cn(
+            "text-[12px] lg:text-[14px] text-ink/70 leading-relaxed font-medium transition-all duration-300",
+            !isActive ? "line-clamp-2" : "line-clamp-none"
+          )}>
             {item.description}
           </p>
         </div>
 
-        {/* Distance Info */}
-        <div className="grid grid-cols-2 gap-4 py-4 border-y border-ink/5 bg-ink/[0.02] -mx-8 px-8">
-            <div className="flex flex-col gap-1">
-              <span className="text-[9px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span>
-              <div className="flex items-center gap-2 text-ink font-bold text-xs">
-                <Landmark className="h-3.5 w-3.5 text-primary" />
-                <span>{item.distanceToSantoDomingo || "–"}</span>
-              </div>
-            </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[9px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span>
-            <div className="flex items-center gap-2 text-ink font-bold text-xs">
-              <Sparkles className="h-3.5 w-3.5 text-secondary" />
-              <span>{item.distanceToBerriozabal || "–"}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-2">
-          <div className="flex items-center gap-4">
-            <a
-              href={item.maps}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
-            >
-              <Navigation className="h-4 w-4" />
-              {lang === 'es' ? 'Cómo llegar' : 'Get directions'}
-            </a>
-            {item.instagram && (
+        {/* Action bar shown when collapsed - Mobile Only */}
+        {!isActive && (
+          <div className="flex flex-col items-center gap-3 pt-1 lg:hidden">
+            <div className="flex w-full gap-2">
               <a
-                href={item.instagram}
+                href={item.maps}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-ink/30 hover:text-ink transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-secondary text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Instagram className="h-4 w-4" />
-                {item.handle}
+                <span>Cómo llegar</span>
+                <Navigation className="h-3 w-3" />
               </a>
-            )}
+              {item.instagram && (
+                <a
+                  href={item.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-ink text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span>Instagram</span>
+                  <Instagram className="h-3 w-3" />
+                </a>
+              )}
+            </div>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-secondary/60">
+              ver más detalles
+            </span>
           </div>
-          <ChevronRight className={cn(
-            "h-5 w-5 transition-all duration-500",
-            isActive ? "text-primary translate-x-0" : "text-ink/10 -translate-x-2"
-          )} />
+        )}
+
+        {/* Detailed Content (Mobile Expansion) */}
+        <AnimatePresence>
+          {isActive && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="flex flex-col gap-4 lg:hidden overflow-hidden"
+            >
+              {/* Mobile Interactive Map */}
+              <div
+                className="lg:hidden w-full h-[110px] rounded-2xl overflow-hidden border border-neutral-100 shadow-inner relative pointer-events-none"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <WeddingMap 
+                  compact={true}
+                  activeMarkerId={item.id}
+                  filterTypes={["gastronomy"]}
+                  onMarkerClick={onMarkerClick}
+                  hideUI={true}
+                  hideLegend={true}
+                />
+              </div>
+
+              {/* Distance Info */}
+              <div className="grid grid-cols-2 gap-4 py-3 border-y border-neutral-100 bg-neutral-50/50 -mx-4 px-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[8px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span>
+                    <div className="flex items-center gap-2 text-ink font-bold text-[11px]">
+                      <Landmark className="h-3.5 w-3.5 text-primary" />
+                      <span>{item.distanceToSantoDomingo || "–"}</span>
+                    </div>
+                  </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[8px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span>
+                  <div className="flex items-center gap-2 text-ink font-bold text-[11px]">
+                    <Sparkles className="h-3.5 w-3.5 text-secondary" />
+                    <span>{item.distanceToBerriozabal || "–"}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3 pt-2">
+                 <a
+                  href={item.maps}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-secondary text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all hover:bg-ink active:scale-[0.98] shadow-md"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span>Cómo llegar</span>
+                  <Navigation className="h-4 w-4" />
+                </a>
+                
+                {item.instagram && (
+                    <a
+                      href={item.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3 bg-ink text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all hover:bg-secondary active:scale-[0.98] shadow-md"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span>Instagram</span>
+                      <Instagram className="h-4 w-4" />
+                    </a>
+                )}
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClick?.();
+                  }}
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-neutral-100 text-ink rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all hover:bg-neutral-200"
+                >
+                  <span>Ver menos</span>
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Desktop Only Distance & Links */}
+        <div className="hidden lg:flex flex-col gap-5">
+          {/* Distance Info */}
+          <div className="grid grid-cols-2 gap-4 py-2.5 lg:py-4 border-y border-neutral-100 bg-neutral-50/50 -mx-8 px-8">
+              <div className="flex flex-col gap-1">
+                <span className="text-[8px] lg:text-[9px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span>
+                <div className="flex items-center gap-2 text-ink font-bold text-[11px] lg:text-xs">
+                  <Landmark className="h-3.5 w-3.5 text-primary" />
+                  <span>{item.distanceToSantoDomingo || "–"}</span>
+                </div>
+              </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-[8px] lg:text-[9px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span>
+              <div className="flex items-center gap-2 text-ink font-bold text-[11px] lg:text-xs">
+                <Sparkles className="h-3.5 w-3.5 text-secondary" />
+                <span>{item.distanceToBerriozabal || "–"}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-1 lg:pt-2">
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href={item.maps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[11px] lg:text-xs font-black uppercase tracking-widest text-secondary hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Navigation className="h-4 w-4" />
+                {lang === 'es' ? 'Cómo llegar' : 'Get directions'}
+              </a>
+              {item.instagram && (
+                <a
+                  href={item.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-[11px] lg:text-xs font-black uppercase tracking-widest text-ink/30 hover:text-ink transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Instagram className="h-4 w-4" />
+                  {item.handle}
+                </a>
+              )}
+            </div>
+            <ChevronRight className={cn(
+              "h-5 w-5 transition-all duration-500 hidden md:block",
+              isActive ? "text-secondary translate-x-0" : "text-ink/10 -translate-x-2"
+            )} />
+          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-const MAP_STYLE = [
-  { "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }] },
-  { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#f2f2f2" }] },
-  { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] },
-  { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": -100 }, { "lightness": 45 }] },
-  { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#cad2c5" }, { "visibility": "on" }] }
-];
