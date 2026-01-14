@@ -42,14 +42,15 @@ export const MARKERS: MarkerData[] = [
     time: "Sábado 5:30 pm",
     description: "Joya del barroco mexicano con impresionante interior dorado y capilla del Rosario."
   },
-  { 
-    id: "calenda", 
-    name: "Calenda Tradicional", 
-    type: "event", 
-    position: { lat: 17.0658, lng: -96.7233 },
-    time: "Viernes 5:30 pm",
-    description: "Desfile festivo por las calles del centro histórico con marmotas, gigantes y banda de música."
-  },
+  // Calenda del día 11 oculta para invitados de Oaxaca
+  // { 
+  //   id: "calenda", 
+  //   name: "Calenda Tradicional", 
+  //   type: "event", 
+  //   position: { lat: 17.0658, lng: -96.7233 },
+  //   time: "Viernes 5:30 pm",
+  //   description: "Desfile festivo por las calles del centro histórico con marmotas, gigantes y banda de música."
+  // },
   { 
     id: "recepcion", 
     name: "Salón Berriozábal 120", 
@@ -58,15 +59,6 @@ export const MARKERS: MarkerData[] = [
     address: "Calle de Berriozábal 120, Centro",
     time: "Sábado 7:00 pm",
     description: "Espacio elegante donde celebraremos nuestra unión y brindaremos con todos ustedes."
-  },
-  { 
-    id: "Cóctel de bienvenida", 
-    name: "Restaurante Catedral", 
-    type: "event", 
-    position: { lat: 17.0608, lng: -96.7254 }, 
-    address: "García Vigil 105, Centro",
-    time: "Viernes 6:30 pm",
-    description: "Lugar de encuentro para nuestro cóctel de bienvenida."
   },
 
   // Hotels
@@ -371,7 +363,6 @@ const getMarkerIconEmoji = (type: MarkerType, id: string) => {
   if (type === "event") {
     if (lowId === "ceremonia" || lowId === "calenda") return "⛪";
     if (lowId === "recepcion") return "🎉";
-    if (lowId === "cóctel de bienvenida") return "🥂";
     return "✨";
   }
   return "";
@@ -574,7 +565,7 @@ export function WeddingMap({
               if (isMobile) return;
               
               // Custom content for the church to show both events
-              const isChurch = markerData.id === "ceremonia" || markerData.id === "calenda" || markerData.name.includes("Santo Domingo");
+              const isChurch = markerData.id === "ceremonia" || markerData.name.includes("Santo Domingo");
               
               let content = `<div style="padding: 0px; font-family: sans-serif; font-size: 11px; font-weight: 700; line-height: 1.2;">`;
               

@@ -67,7 +67,8 @@ const SATURDAY_EVENTS_LIST: ItineraryEvent[] = [
   },
 ]
 
-const ALL_EVENTS = [...FRIDAY_EVENTS, ...SATURDAY_EVENTS_LIST]
+// Solo eventos del sábado 12 para invitados de Oaxaca
+const ALL_EVENTS = [...SATURDAY_EVENTS_LIST]
 
 export default function WeddingItinerary({ language = "es" }: { language?: Language }) {
   const [activeEventId, setActiveEventId] = React.useState<string | null>(null)
@@ -76,9 +77,9 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
   const lastUpdateRef = React.useRef(Date.now())
 
   React.useEffect(() => {
-    // En desktop, activamos el primer evento por defecto para que se vea el mapa
-    if (window.innerWidth >= 1024 && !activeEventId) {
-      setActiveEventId(ALL_EVENTS[0].id)
+    // En desktop, activamos el primer evento del sábado por defecto para que se vea el mapa
+    if (window.innerWidth >= 1024 && !activeEventId && SATURDAY_EVENTS_LIST.length > 0) {
+      setActiveEventId(SATURDAY_EVENTS_LIST[0].id)
     }
   }, [])
 
@@ -105,12 +106,11 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
     }
   }
 
-    const activeEvent = ALL_EVENTS.find(e => e.id === activeEventId) || ALL_EVENTS[0]
+    const activeEvent = ALL_EVENTS.find(e => e.id === activeEventId) || SATURDAY_EVENTS_LIST[0]
 
     const ITINERARY_LEGEND = [
       { label: "Templo de Santo Domingo", color: "#C66B3D", emoji: "⛪" },
       { label: "Salón Berriozabal 120", color: "#C66B3D", emoji: "🎉" },
-      { label: "Restaurante Catedral", color: "#C66B3D", emoji: "🥂" },
     ];
 
 
@@ -118,7 +118,8 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
     <div className="relative w-full">
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
         <div className="w-full lg:w-[55%] space-y-4 lg:space-y-8">
-            <div className="space-y-3 lg:space-y-6">
+            {/* Día 11 oculto para invitados de Oaxaca */}
+            <div className="space-y-3 lg:space-y-6 hidden">
               <DayHeader 
                 dayNumber="11" 
                 dayName="Viernes" 
@@ -156,7 +157,7 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
                     <TimelineItem 
                       key={event.id}
                       event={event}
-                      index={index + FRIDAY_EVENTS.length}
+                      index={index}
                       onInView={handleEventInView}
                       onClick={() => handleItemClick(event.id)}
                       isActive={activeEventId === event.id}
@@ -202,7 +203,7 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
                       "text-[11px] font-bold uppercase tracking-[0.15em]",
                       activeEvent?.dayKey === "saturday" ? "text-secondary" : "text-primary"
                     )}>
-                      {activeEvent?.dayKey === "saturday" ? "Sábado 12" : "Viernes 11"} · {activeEvent?.time}
+                      Sábado 12 · {activeEvent?.time}
                     </p>
 
                   <h4 className="font-heading text-lg text-foreground truncate">

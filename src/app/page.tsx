@@ -289,7 +289,7 @@ export default function Page() {
           >
             <WeddingSaveTheDate
               title="SAVE THE DATE"
-              date="11 y 12 de septiembre de 2026"
+              date="12 de septiembre de 2026"
               layout="comfortable"
             />
           </WeddingSection>
