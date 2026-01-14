@@ -78,7 +78,7 @@ export default function WeddingItinerary({ language = "es" }: { language?: Langu
 
   React.useEffect(() => {
     // En desktop, activamos el primer evento del sábado por defecto para que se vea el mapa
-    if (window.innerWidth >= 1024 && !activeEventId && SATURDAY_EVENTS_LIST.length > 0) {
+    if (typeof window !== 'undefined' && window.innerWidth >= 1024 && !activeEventId && SATURDAY_EVENTS_LIST.length > 0) {
       setActiveEventId(SATURDAY_EVENTS_LIST[0].id)
     }
   }, [])
@@ -250,7 +250,7 @@ function DayHeader({ dayNumber, dayName, monthYear, bgImage }: { dayNumber: stri
 
 function TimelineItem({ event, index, onInView, onClick, isActive, alignment = "left", bgImage = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/TARJETA_BLANCA-1767905973064.png?width=8000&height=8000&resize=contain" }: { event: ItineraryEvent, index: number, onInView: (id: string) => void, onClick?: () => void, isActive: boolean, alignment?: "left" | "right", bgImage?: string }) {
   const { ref, inView } = useInView({ threshold: 0, rootMargin: "-40% 0px -40% 0px", triggerOnce: false })
-  React.useEffect(() => { if (inView && window.innerWidth >= 1024) onInView(event.id) }, [inView, event.id, onInView])
+  React.useEffect(() => { if (inView && typeof window !== 'undefined' && window.innerWidth >= 1024) onInView(event.id) }, [inView, event.id, onInView])
   const isLeft = alignment === "left"
   return (
     <motion.div ref={ref} id={`itinerary-${event.id}`} initial={{ opacity: 0, x: isLeft ? -30 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }} onClick={onClick} className={cn("relative flex flex-col items-start lg:items-center cursor-pointer", isLeft ? "lg:flex-row-reverse" : "lg:flex-row")}>
