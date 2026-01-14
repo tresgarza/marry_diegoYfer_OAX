@@ -13,7 +13,15 @@ import {
   Navigation,
   Info,
   X,
-  Sparkles
+  Sparkles,
+  Phone,
+  Ticket,
+  Calendar,
+  DollarSign,
+  Mail,
+  User,
+  Globe,
+  Instagram
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { WeddingMap, MARKERS, MarkerData, MarkerType } from "@/components/WeddingMap";
@@ -31,6 +39,15 @@ export default function MapaPage() {
   const [activeCategory, setActiveCategory] = React.useState<MarkerType | "all">("all");
   const [selectedMarker, setSelectedMarker] = React.useState<MarkerData | null>(null);
   const [searchQuery, setSearchQuery] = React.useState("");
+
+  React.useEffect(() => {
+    if (selectedMarker) {
+      const element = document.getElementById(`marker-item-${selectedMarker.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+  }, [selectedMarker]);
 
   const filteredMarkers = MARKERS.filter(m => {
     const matchesCategory = activeCategory === "all" || m.type === activeCategory;
@@ -121,6 +138,7 @@ export default function MapaPage() {
             filteredMarkers.map((m) => (
               <button
                 key={m.id}
+                id={`marker-item-${m.id}`}
                 onClick={() => setSelectedMarker(m)}
                 className={cn(
                   "w-full flex items-start gap-4 p-4 rounded-2xl border transition-all text-left group",
@@ -147,12 +165,19 @@ export default function MapaPage() {
                       {m.address}
                     </p>
                   )}
-                  {m.distinction && (
-                    <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[9px] font-black uppercase">
-                      <Sparkles className="h-2.5 w-2.5 fill-current" />
-                      {m.distinction}
-                    </span>
-                  )}
+                  <div className="flex flex-wrap gap-2 mt-1.5">
+                    {m.distinction && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[9px] font-black uppercase">
+                        <Sparkles className="h-2.5 w-2.5 fill-current" />
+                        {m.distinction}
+                      </span>
+                    )}
+                    {m.price && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-black uppercase">
+                        {m.price}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <ChevronRight className={cn(
                   "h-4 w-4 mt-2 transition-all",
@@ -173,15 +198,17 @@ export default function MapaPage() {
 
       {/* Map Content */}
       <section className="flex-1 relative h-full">
-        <WeddingMap
-          className="w-full h-full rounded-none border-none shadow-none"
-          activeMarkerId={selectedMarker?.id}
-          onMarkerClick={handleMarkerClick}
-          hideLegend={isMobile}
-          hideUI={false}
-          offsetX={isMobile ? 0 : 0}
-          offsetY={isMobile ? -80 : 0}
-        />
+          <WeddingMap
+            className="w-full h-full rounded-none border-none shadow-none"
+            activeMarkerId={selectedMarker?.id}
+            onMarkerClick={handleMarkerClick}
+            hideLegend={true}
+            hideUI={false}
+            offsetX={isMobile ? 0 : 0}
+            offsetY={isMobile ? -80 : 0}
+            defaultZoom={14}
+            activeZoom={16}
+          />
 
         {/* Selected Details Drawer/Overlay */}
         <AnimatePresence>
@@ -193,8 +220,8 @@ export default function MapaPage() {
               className={cn(
                 "absolute bg-white shadow-2xl border-t lg:border border-ink/10 z-50 overflow-hidden",
                 isMobile 
-                  ? "bottom-0 left-0 right-0 rounded-t-[2.5rem] p-8" 
-                  : "bottom-8 left-8 w-[380px] rounded-[2rem] p-8"
+                  ? "bottom-0 left-0 right-0 rounded-t-[2.5rem] p-8 max-h-[85vh] overflow-y-auto no-scrollbar" 
+                  : "bottom-8 left-8 w-[400px] rounded-[2rem] p-8 max-h-[70vh] overflow-y-auto no-scrollbar"
               )}
             >
               <button 
@@ -206,15 +233,20 @@ export default function MapaPage() {
 
               <div className="space-y-6">
                 <div className="space-y-2 pr-8">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center flex-wrap gap-2">
                     <span 
                       className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider text-white shadow-sm"
                       style={{ backgroundColor: CATEGORIES.find(c => c.id === selectedMarker.type)?.color }}
                     >
                       {CATEGORIES.find(c => c.id === selectedMarker.type)?.label}
                     </span>
-                    {selectedMarker.tag && (
+                    {selectedMarker.category && (
                       <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-ink/5 text-ink/40 border border-ink/5">
+                        {selectedMarker.category}
+                      </span>
+                    )}
+                    {selectedMarker.tag && (
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-primary/5 text-primary/70 border border-primary/10">
                         {selectedMarker.tag}
                       </span>
                     )}
@@ -230,15 +262,79 @@ export default function MapaPage() {
                   </p>
                 )}
 
-                <div className="space-y-4">
+                <div className="space-y-4 pt-2">
                   {selectedMarker.address && (
-                    <div className="flex items-start gap-3 text-ink/40 group">
+                    <div className="flex items-start gap-3 text-ink/40">
                       <MapPin className="h-5 w-5 shrink-0 mt-0.5" />
                       <span className="text-sm font-medium leading-snug">{selectedMarker.address}</span>
                     </div>
                   )}
+
+                  {selectedMarker.phone && (
+                    <div className="flex items-start gap-3 text-ink/40">
+                      <Phone className="h-5 w-5 shrink-0 mt-0.5" />
+                      <span className="text-sm font-medium leading-snug">{selectedMarker.phone}</span>
+                    </div>
+                  )}
+
+                  {selectedMarker.bookingCode && (
+                    <div className="flex items-start gap-3 text-primary">
+                      <Ticket className="h-5 w-5 shrink-0 mt-0.5" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-wider opacity-60">Código de Reserva</span>
+                        <span className="text-sm font-bold">{selectedMarker.bookingCode}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedMarker.rates && (
+                    <div className="flex items-start gap-3 text-ink/60">
+                      <DollarSign className="h-5 w-5 shrink-0 mt-0.5 text-emerald-600" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-wider opacity-60 text-ink/40">Tarifas Aproximadas</span>
+                        <span className="text-sm font-bold">{selectedMarker.rates}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedMarker.deadline && (
+                    <div className="flex items-start gap-3 text-ink/60">
+                      <Calendar className="h-5 w-5 shrink-0 mt-0.5 text-orange-500" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-wider opacity-60 text-ink/40">Fecha Límite Bloqueo</span>
+                        <span className="text-sm font-bold">{selectedMarker.deadline}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {(selectedMarker.email || selectedMarker.contact) && (
+                    <div className="flex items-start gap-3 text-ink/60">
+                      <Mail className="h-5 w-5 shrink-0 mt-0.5 text-blue-500" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-wider opacity-60 text-ink/40">Contacto de Reservas</span>
+                        <span className="text-sm font-bold">
+                          {selectedMarker.contact && `${selectedMarker.contact} `}
+                          {selectedMarker.email && (
+                            <a href={`mailto:${selectedMarker.email}`} className="underline hover:text-primary transition-colors">
+                              ({selectedMarker.email})
+                            </a>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedMarker.time && (
+                    <div className="flex items-start gap-3 text-primary">
+                      <Calendar className="h-5 w-5 shrink-0 mt-0.5" />
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-wider opacity-60">Horario / Cita</span>
+                        <span className="text-sm font-bold">{selectedMarker.time}</span>
+                      </div>
+                    </div>
+                  )}
                   
-                  <div className="flex flex-col gap-3 pt-4">
+                  <div className="flex flex-col gap-3 pt-6 border-t border-ink/5">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${selectedMarker.position.lat},${selectedMarker.position.lng}`}
                       target="_blank"
@@ -249,17 +345,41 @@ export default function MapaPage() {
                       <span>Cómo llegar</span>
                     </a>
                     
-                    {selectedMarker.website && (
-                      <a
-                        href={selectedMarker.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 w-full py-4 bg-ink/5 text-ink rounded-2xl text-xs lg:text-sm font-black uppercase tracking-widest transition-all hover:bg-ink hover:text-white border border-ink/10"
-                      >
-                        <Info className="h-5 w-5" />
-                        <span>Más información</span>
-                      </a>
-                    )}
+                    <div className="grid grid-cols-2 gap-3">
+                      {selectedMarker.website && (
+                        <a
+                          href={selectedMarker.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 py-4 bg-ink/5 text-ink rounded-2xl text-[10px] lg:text-xs font-black uppercase tracking-widest transition-all hover:bg-ink hover:text-white border border-ink/10"
+                        >
+                          <Globe className="h-4 w-4" />
+                          <span>Sitio Web</span>
+                        </a>
+                      )}
+                      {selectedMarker.instagram && (
+                        <a
+                          href={selectedMarker.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 py-4 bg-ink/5 text-ink rounded-2xl text-[10px] lg:text-xs font-black uppercase tracking-widest transition-all hover:bg-ink hover:text-white border border-ink/10"
+                        >
+                          <Instagram className="h-4 w-4" />
+                          <span>Instagram</span>
+                        </a>
+                      )}
+                      {!selectedMarker.website && !selectedMarker.instagram && selectedMarker.type === 'gastronomy' && (
+                         <a
+                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedMarker.name + " Oaxaca")}`}
+                         target="_blank"
+                         rel="noopener noreferrer"
+                         className="col-span-2 flex items-center justify-center gap-2 py-4 bg-ink/5 text-ink rounded-2xl text-[10px] lg:text-xs font-black uppercase tracking-widest transition-all hover:bg-ink hover:text-white border border-ink/10"
+                       >
+                         <Info className="h-4 w-4" />
+                         <span>Ver en Google Maps</span>
+                       </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

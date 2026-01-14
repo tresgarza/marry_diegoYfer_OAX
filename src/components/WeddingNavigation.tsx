@@ -36,12 +36,12 @@ export interface WeddingNavigationProps {
 
 const DEFAULT_SECTIONS: SectionDef[] = [
   { id: "itinerario", labelEs: "Itinerario", labelEn: "Itinerary" },
+  { id: "rsvp", labelEs: "Confirmar", labelEn: "RSVP" },
   { id: "hoteles", labelEs: "Hoteles", labelEn: "Hotels" },
   { id: "mapa", labelEs: "Mapa", labelEn: "Map" },
   { id: "gastronomia", labelEs: "Gastronomía", labelEn: "Gastronomy" },
   { id: "maquillaje", labelEs: "Maquillaje", labelEn: "Beauty" },
   { id: "cultura", labelEs: "Cultura", labelEn: "Culture" },
-  { id: "rsvp", labelEs: "Confirmar", labelEn: "RSVP" },
 ]
 
 export default function WeddingNavigation({
@@ -139,7 +139,7 @@ export default function WeddingNavigation({
                 priority
               />
             </div>
-            <span className="font-heading text-base sm:text-lg font-semibold tracking-tight text-secondary">
+            <span className="font-heading text-base sm:text-lg font-semibold tracking-tight text-white">
               {coupleName}
             </span>
           </a>
@@ -157,9 +157,9 @@ export default function WeddingNavigation({
                         <Link
                           href="/mapa"
                           className={cn(
-                            "inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                            "inline-flex items-center px-3.5 py-2 text-sm font-medium transition-all relative",
                             "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                            "text-primary-foreground/90 hover:bg-secondary/20 hover:text-primary-foreground"
+                            "text-primary-foreground/80 hover:text-white"
                           )}
                         >
                           <span className="truncate">{renderLabel(s)}</span>
@@ -174,13 +174,13 @@ export default function WeddingNavigation({
                         href={`#${s.id}`}
                         onClick={(e) => handleAnchorClick(e, s.id)}
                         className={cn(
-                          "inline-flex items-center rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
+                          "inline-flex items-center px-3.5 py-2 text-sm font-medium transition-all relative",
                           "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                           isRSVP 
-                            ? "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 ml-2 px-5" 
+                            ? "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 ml-2 px-5 rounded-full" 
                             : isActive
-                              ? "bg-secondary/20 text-secondary shadow-sm"
-                              : "text-primary-foreground/90 hover:bg-secondary/20 hover:text-primary-foreground",
+                              ? "text-white after:absolute after:bottom-1 after:left-3.5 after:right-3.5 after:h-0.5 after:bg-white after:content-['']"
+                              : "text-primary-foreground/80 hover:text-white",
                         )}
                       >
                         <span className="truncate">{renderLabel(s)}</span>
@@ -222,57 +222,57 @@ export default function WeddingNavigation({
                           const isRSVP = s.id === "rsvp"
                           const isExternalRoute = s.id === "mapa"
 
-                          if (isExternalRoute) {
+                            if (isExternalRoute) {
+                              return (
+                                <SheetClose asChild key={s.id}>
+                                  <Link
+                                    href="/mapa"
+                                    className={cn(
+                                      "flex items-center justify-between px-4 py-3.5 text-base font-medium transition-all relative",
+                                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                      "text-primary-foreground hover:bg-white/5",
+                                    )}
+                                  >
+                                    <span className="min-w-0 truncate">{renderLabel(s)}</span>
+                                    <span
+                                      className="ml-3 h-1.5 w-1.5 rounded-full bg-primary-foreground/20"
+                                      aria-hidden="true"
+                                    />
+                                  </Link>
+                                </SheetClose>
+                              )
+                            }
+                            
                             return (
                               <SheetClose asChild key={s.id}>
-                                <Link
-                                  href="/mapa"
+                                <a
+                                  href={`#${s.id}`}
+                                  onClick={(e) => handleAnchorClick(e, s.id)}
                                   className={cn(
-                                    "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium transition-all",
+                                    "flex items-center justify-between px-4 py-3.5 text-base font-medium transition-all relative",
                                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                    "text-primary-foreground hover:bg-secondary/10",
+                                    isRSVP
+                                      ? "bg-secondary text-secondary-foreground shadow-md mt-2 rounded-xl"
+                                      : isActive
+                                        ? "text-white after:absolute after:bottom-2 after:left-4 after:right-10 after:h-0.5 after:bg-white after:content-['']"
+                                        : "text-primary-foreground hover:bg-white/5",
                                   )}
                                 >
                                   <span className="min-w-0 truncate">{renderLabel(s)}</span>
-                                  <span
-                                    className="ml-3 h-1.5 w-1.5 rounded-full bg-primary-foreground/20"
-                                    aria-hidden="true"
-                                  />
-                                </Link>
+                                  {isRSVP ? (
+                                    <div className="h-2 w-2 rounded-full bg-secondary-foreground animate-pulse" />
+                                  ) : (
+                                    <span
+                                      className={cn(
+                                        "ml-3 h-1.5 w-1.5 rounded-full",
+                                        isActive ? "bg-white" : "bg-primary-foreground/20",
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  )}
+                                </a>
                               </SheetClose>
                             )
-                          }
-                          
-                          return (
-                            <SheetClose asChild key={s.id}>
-                              <a
-                                href={`#${s.id}`}
-                                onClick={(e) => handleAnchorClick(e, s.id)}
-                                className={cn(
-                                  "flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium transition-all",
-                                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                  isRSVP
-                                    ? "bg-secondary text-secondary-foreground shadow-md mt-2"
-                                    : isActive
-                                      ? "bg-secondary/20 text-secondary border border-secondary/20"
-                                      : "text-primary-foreground hover:bg-secondary/10",
-                                )}
-                              >
-                                <span className="min-w-0 truncate">{renderLabel(s)}</span>
-                                {isRSVP ? (
-                                  <div className="h-2 w-2 rounded-full bg-secondary-foreground animate-pulse" />
-                                ) : (
-                                  <span
-                                    className={cn(
-                                      "ml-3 h-1.5 w-1.5 rounded-full",
-                                      isActive ? "bg-secondary" : "bg-primary-foreground/20",
-                                    )}
-                                    aria-hidden="true"
-                                  />
-                                )}
-                              </a>
-                            </SheetClose>
-                          )
                         })}
                       </div>
 

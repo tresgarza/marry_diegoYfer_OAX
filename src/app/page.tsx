@@ -10,7 +10,6 @@ import { WeddingSection } from "@/components/WeddingSection";
 import { WeddingMap } from "@/components/WeddingMap";
 import WeddingItinerary from "@/components/WeddingItinerary";
 import WeddingRSVPFab from "@/components/WeddingRSVPFab";
-
 export default function Page() {
   return (
     <main className="min-h-dvh w-full text-foreground">
@@ -23,251 +22,278 @@ export default function Page() {
       {/* Floating RSVP Button (Mobile only) */}
       <WeddingRSVPFab />
 
-      {/* Hero (UNTOUCHED as per constraints) */}
-      <div id="hero" className="scroll-mt-24">
-        <WeddingHero
-          imageAlt="Agave plantation in Oaxaca"
-          imageUrl="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757473184363-eqh7n9twk6.png"
-          names="Fernanda & Diego"
-          dateLabel="12.09.26"
-          locationLabel="Oaxaca, México"
-          priorityImage
-        />
-      </div>
+        {/* Hero (UNTOUCHED as per constraints) */}
+        <div id="hero" className="scroll-mt-24">
+          <WeddingHero
+            imageAlt="Agave plantation in Oaxaca"
+            imageUrl="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757473184363-eqh7n9twk6.png"
+            names="FERNANDA & DIEGO"
+            dateLabel="12.09.26"
+            locationLabel="Oaxaca, México"
+            priorityImage
+          />
+        </div>
 
-      {/* Sections below Hero */}
+        <div>
+          {/* Sections below Hero */}
 
-      {/* Itinerary */}
-      <WeddingSection
-        id="itinerario"
-        title="Nuestro Itinerario"
-        subtitle="Todos los momentos que formarán parte de nuestro gran día para que puedas acompañarnos en cada paso."
-        textureImage="/backgrounds/fondo_soft_ivory_elegance.png"
-        withSeparator
-        noAnimation
-      >
-        <WeddingItinerary language="es" />
-      </WeddingSection>
+          {/* Itinerary */}
+          <WeddingSection
+            id="itinerario"
+            title="Nuestro Itinerario"
+            subtitle="Todos los momentos que formarán parte de nuestro gran día para que puedas acompañarnos en cada paso."
+            noAnimation
+            textureImage="/backgrounds/bg_itinerario.svg"
+            backgroundSize="100% auto"
+            backgroundRepeat="repeat-y"
+            backgroundPosition="top center"
+          >
+            <WeddingItinerary language="es" />
+          </WeddingSection>
 
-      {/* Hotels */}
-      <WeddingSection
-        id="hoteles"
-        title="Hoteles recomendados"
-        subtitle="Hospedaje seleccionado para que disfrutes al máximo de tu estancia en Oaxaca."
-        textureImage="/backgrounds/fondo_soft_sage_green.png"
-        topGradient
-        noAnimation={true}
-      >
-        <WeddingHotels
-          locale="es"
-          hotels={[
-            {
-              name: "Grand Fiesta Americana",
-              category: "5*",
-              rooms: "50",
-              address: "Calle de José María Pino Suárez #702, Centro",
-              phones: ["9515017690", "4433108019", "4431378728"],
-              website: "https://www.corpo-rate.com/login?groupId=G1UZ48@FGO",
-              email: "banquetesfgoa@posadas.com",
-              promoCode: "G1UZ48@FGO",
-              instructions: "Tarifa sujeta a disponibilidad de cuartos destinados a este código. Reservaciones únicamente por los canales indicados.",
-              rate: "$6,188.00 (Ocupación Sencilla o Doble)",
-              deadline: "12 de Agosto",
-              contact: "Karla",
-              coords: { lat: 17.0706, lng: -96.7208 },
-              durationToChurch: "11 mins",
-              durationToParty: "11 mins"
-            },
-            {
-              name: "Holiday Inn Express",
-              category: "4*",
-              rooms: "A Disposición",
-              address: "Diaz Quintas 115, Oaxaca, OAX, MX",
-              phones: ["8008385364"],
-              website: "https://www.ihg.com/holidayinnexpress/hotels/us/es/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qIta=99801505&icdv=99801505&qSlH=OAXMX&qCiD=11&qCiMy=082026&qCoD=13&qCoMy=082026&qGrpCd=FYD&setPMCookies=true&qSHBrC=EX&qDest=Diaz%20Quintas%20:%20115,%20Oaxaca,%20OAX,%20MX&showApp=true&adjustMonth=false&srb_u=1&qRmFltr=",
-              promoCode: "FYD",
-              instructions: "Reservar llamando al 800 8385364 mencionando el nombre del evento “Boda Fernanda González Pozas & Diego Garza González” o a través del link con el código FYD.",
-              rate: "Tarifa Preferencial",
-              deadline: "Bloqueo Abierto",
-              contact: "Directo en el link",
-              coords: { lat: 17.0706, lng: -96.7231 },
-              durationToChurch: "7 mins",
-              durationToParty: "13 mins"
-            },
-            {
-              name: "Hotel Boutique de la Parra",
-              category: "Boutique",
-              rooms: "13",
-              address: "Guerrero #117, Centro",
-              phones: ["9515141900"],
-              website: "https://www.hoteldelaparra.com",
-              email: "frontdesk@hoteldelaparra.com",
-              promoCode: "F&D1009",
-              rate: "$4,875.00 - $6,880.00",
-              deadline: "Bloqueo Abierto",
-              contact: "Daniela",
-              coords: { lat: 17.0594, lng: -96.7234 },
-              durationToChurch: "13 mins",
-              durationToParty: "6 mins"
-            },
-            {
-              name: "Suites de la Parra",
-              category: "Boutique",
-              rooms: "14",
-              address: "Las Casas #110, Centro",
-              phones: ["9515141900"],
-              website: "https://suitesdelaparra.com/",
-              email: "suitesdelaparra@gmail.com",
-              promoCode: "F&D1009",
-              rate: "$4,050.00 - $6,000.00",
-              deadline: "Bloqueo Abierto",
-              contact: "Paola",
-              coords: { lat: 17.0592, lng: -96.7247 },
-              durationToChurch: "14 mins",
-              durationToParty: "9 mins"
-            },
-            {
-              name: "Majagua",
-              category: "Boutique",
-              rooms: "A Disposición",
-              address: "José María Pino Suárez #519, Centro",
-              phones: ["5513284105"],
-              website: "https://www.majaguahotel.com",
-              promoCode: "FERNANDAYDIEGO2026",
-              instructions: "10% de descuento sobre la tarifa del momento. En Código Promocional, poner el código creado al reservar.",
-              rate: "10% de Descuento",
-              deadline: "Bloqueo Abierto",
-              contact: "Blanca",
-              coords: { lat: 17.0673, lng: -96.7214 },
-              durationToChurch: "6 mins",
-              durationToParty: "6 mins"
-            },
-            {
-              name: "Naura",
-              category: "Boutique",
-              rooms: "24",
-              address: "Miguel Hidalgo 918, Centro, Oaxaca de Juárez",
-              phones: ["9515015400"],
-              website: "https://www.hotelnaura.com",
-              email: "reservaciones@hotelnaura.com",
-              rate: "$2,499.00 - $3,213.00 (Imp. Incluidos)",
-              deadline: "Bloqueo Abierto",
-              contact: "Maricruz",
-              coords: { lat: 17.0603, lng: -96.7196 },
-              durationToChurch: "16 mins",
-              durationToParty: "8 mins"
-            },
-            {
-              name: "Hotel Abu",
-              category: "Boutique",
-              rooms: "10",
-              address: "Murguía #104, Centro",
-              phones: ["9515164900"],
-              website: "https://www.hotelabu.com/",
-              email: "reservaciones@hotelabu.com",
-              rate: "$1,743.00 - $2,756.00 (Imp. Incluidos)",
-              deadline: "Bloqueo Abierto",
-              contact: "Jorge",
-              coords: { lat: 17.0641, lng: -96.7248 },
-              durationToChurch: "6 mins",
-              durationToParty: "4 mins"
-            },
-            {
-              name: "Hotel City Centro",
-              category: "4*",
-              rooms: "A Disposición",
-              address: "Aldama #414, Barrio de Jalatlaco",
-              phones: ["5564488773"],
-              website: "https://www.cityexpress.com",
-              email: "rfuentesr@norte19.com",
-              rate: "$3,332.00 - $4,284.00 (Imp. Incluidos)",
-              deadline: "Bloqueo Abierto",
-              contact: "Rocio",
-              coords: { lat: 17.0675, lng: -96.7139 },
-              durationToChurch: "20 mins",
-              durationToParty: "20 mins"
-            },
-          ]}
-        />
-      </WeddingSection>
+          {/* RSVP */}
+          <WeddingSection
+            id="rsvp"
+            maxWidth="max-w-4xl"
+            textureImage="/backgrounds/bg_rsvp.svg"
+            backgroundSize="100% auto"
+            backgroundRepeat="repeat-y"
+            backgroundPosition="top center"
+          >
+            <WeddingRSVP />
+          </WeddingSection>
 
-      {/* RSVP */}
-      <WeddingSection
-        id="rsvp"
-        textureImage="/backgrounds/fondo_ivory_texture.png"
-        maxWidth="max-w-4xl"
-        topGradient
-      >
-        <WeddingRSVP />
-      </WeddingSection>
+          {/* Hotels */}
+          <WeddingSection
+            id="hoteles"
+            title="Hoteles recomendados"
+            subtitle="Hospedaje seleccionado para que disfrutes al máximo de tu estancia en Oaxaca."
+            noAnimation={true}
+            textureImage="/backgrounds/bg_hoteles.svg"
+            backgroundSize="100% auto"
+            backgroundRepeat="repeat-y"
+            backgroundPosition="top center"
+          >
+            <WeddingHotels
+              locale="es"
+              hotels={[
+                {
+                  name: "Grand Fiesta Americana",
+                  category: "5*",
+                  rooms: "50",
+                  address: "Calle de José María Pino Suárez #702, Centro",
+                  phones: ["9515017690", "4433108019", "4431378728"],
+                  website: "https://www.corpo-rate.com/login?groupId=G1UZ48@FGO",
+                  email: "banquetesfgoa@posadas.com",
+                  promoCode: "G1UZ48@FGO",
+                  instructions: "Tarifa sujeta a disponibilidad de cuartos destinados a este código. Reservaciones únicamente por los canales indicados.",
+                  rate: "$6,188.00 (Ocupación Sencilla o Doble)",
+                  deadline: "12 de Agosto",
+                  contact: "Karla",
+                  coords: { lat: 17.0712, lng: -96.7208 },
+                  durationToChurch: "11 mins",
+                  durationToParty: "11 mins"
+                },
+                {
+                  name: "Holiday Inn Express",
+                  category: "4*",
+                  rooms: "A Disposición",
+                  address: "Diaz Quintas 115, Oaxaca, OAX, MX",
+                  phones: ["8008385364"],
+                  website: "https://www.ihg.com/holidayinnexpress/hotels/us/es/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qIta=99801505&icdv=99801505&qSlH=OAXMX&qCiD=11&qCiMy=082026&qCoD=13&qCoMy=082026&qGrpCd=FYD&setPMCookies=true&qSHBrC=EX&qDest=Diaz%20Quintas%20:%20115,%20Oaxaca,%20OAX,%20MX&showApp=true&adjustMonth=false&srb_u=1&qRmFltr=",
+                  promoCode: "FYD",
+                  instructions: "Reservar llamando al 800 8385364 mencionando el nombre del evento “Boda Fernanda González Pozas & Diego Garza González” o a través del link con el código FYD.",
+                  rate: "$2,500.00",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Directo en el link",
+                  coords: { lat: 17.0706, lng: -96.7231 },
+                  durationToChurch: "7 mins",
+                  durationToParty: "13 mins"
+                },
+                {
+                  name: "Hotel Boutique de la Parra",
+                  category: "Boutique",
+                  rooms: "13",
+                  address: "Guerrero #117, Centro",
+                  phones: ["9515141900"],
+                  website: "https://www.hoteldelaparra.com",
+                  email: "frontdesk@hoteldelaparra.com",
+                  promoCode: "F&D1009",
+                  rate: "$4,875.00 - $6,880.00",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Daniela",
+                  coords: { lat: 17.0594, lng: -96.7234 },
+                  durationToChurch: "13 mins",
+                  durationToParty: "6 mins"
+                },
+                {
+                  name: "Suites de la Parra",
+                  category: "Boutique",
+                  rooms: "14",
+                  address: "Las Casas #110, Centro",
+                  phones: ["9515141900"],
+                  website: "https://suitesdelaparra.com/",
+                  email: "suitesdelaparra@gmail.com",
+                  promoCode: "F&D1009",
+                  rate: "$4,050.00 - $6,000.00",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Paola",
+                  coords: { lat: 17.0592, lng: -96.7247 },
+                  durationToChurch: "14 mins",
+                  durationToParty: "9 mins"
+                },
+                {
+                  name: "Majagua",
+                  category: "Boutique",
+                  rooms: "A Disposición",
+                  address: "José María Pino Suárez #519, Centro",
+                  phones: ["5513284105"],
+                  website: "https://www.majaguahotel.com/bookingstep1/?checkin=11%2F09%2F2026&idtokenprovider=100378363&currency=MXN&clientCode=FERNANDAYDIEGO2026&hsri=02040&lang=es&nights=2&parties=W3siYWR1bHRzIjoyLCJjaGlsZHJlbiI6W119XQ%3D%3D&type=hotel&step=1&home=https%3A%2F%2Fwww.majaguahotel.com%2F",
+                  promoCode: "FERNANDAYDIEGO2026",
+                  instructions: "10% de descuento sobre la tarifa del momento. En Código Promocional, poner el código creado al reservar.",
+                  rate: "$7,000 - $10,000 (10% Descuento)",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Blanca",
+                  coords: { lat: 17.0673, lng: -96.7214 },
+                  durationToChurch: "6 mins",
+                  durationToParty: "6 mins"
+                },
+                {
+                  name: "Naura",
+                  category: "Boutique",
+                  rooms: "24",
+                  address: "Miguel Hidalgo 918, Centro, Oaxaca de Juárez",
+                  phones: ["9515015400"],
+                  website: "https://www.hotelnaura.com",
+                  email: "reservaciones@hotelnaura.com",
+                  rate: "$2,499.00 - $3,213.00 (Imp. Incluidos)",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Maricruz",
+                  coords: { lat: 17.0603, lng: -96.7196 },
+                  durationToChurch: "16 mins",
+                  durationToParty: "8 mins"
+                },
+                {
+                  name: "Hotel Abu",
+                  category: "Boutique",
+                  rooms: "10",
+                  address: "Murguía #104, Centro",
+                  phones: ["9515164900"],
+                  website: "https://www.hotelabu.com/",
+                  email: "reservaciones@hotelabu.com",
+                  rate: "$1,743.00 - $2,756.00 (Imp. Incluidos)",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Jorge",
+                  coords: { lat: 17.0641, lng: -96.7248 },
+                  durationToChurch: "6 mins",
+                  durationToParty: "4 mins"
+                },
+                {
+                  name: "Hotel City Centro",
+                  category: "4*",
+                  rooms: "A Disposición",
+                  address: "Aldama #414, Barrio de Jalatlaco",
+                  phones: ["5564488773"],
+                  website: "https://www.cityexpress.com",
+                  email: "rfuentesr@norte19.com",
+                  rate: "$3,332.00 - $4,284.00 (Imp. Incluidos)",
+                  deadline: "Bloqueo Abierto",
+                  contact: "Rocio",
+                  coords: { lat: 17.0675, lng: -96.7139 },
+                  durationToChurch: "20 mins",
+                  durationToParty: "20 mins"
+                },
+                {
+                  name: "One Oaxaca Centro",
+                  category: "3*",
+                  rooms: "A Disposición",
+                  address: "Calzada de la República #205, Centro",
+                  phones: ["9515016500"],
+                  website: "https://www.onehotels.com/en/one-oaxaca-centro",
+                  rate: "$1,600.00 - $1,900.00 (Tarifa Promedio)",
+                  deadline: "Sujeto a disponibilidad",
+                  contact: "Directo en sitio",
+                  coords: { lat: 17.0629554, lng: -96.7172823 },
+                  durationToChurch: "11 mins",
+                  durationToParty: "12 mins"
+                },
+              ]}
+            />
+          </WeddingSection>
 
-      {/* Gastronomy */}
-      <WeddingSection
-        id="gastronomia"
-        title="Gastronomía"
-        subtitle="Nuestros lugares favoritos para desayunar, comer y brindar en el centro de Oaxaca."
-        textureImage="/backgrounds/fondo_soft_blush_sand.png"
-        topGradient
-      >
-        <WeddingGastronomy lang="es" />
-      </WeddingSection>
+          {/* Gastronomy */}
+          <WeddingSection
+            id="gastronomia"
+            title="Gastronomía"
+            subtitle="Nuestros lugares favoritos para desayunar, comer y brindar en el centro de Oaxaca."
+            textureImage="/backgrounds/bg_gastronomia.svg"
+            backgroundSize="100% auto"
+            backgroundRepeat="repeat-y"
+            backgroundPosition="top center"
+          >
+            <WeddingGastronomy lang="es" />
+          </WeddingSection>
 
-      {/* Beauty Services */}
-      <WeddingSection
-        id="maquillaje"
-        title="Maquillaje & Peinado"
-        subtitle="Servicios profesionales recomendados para que luzcas espectacular."
-        textureImage="/backgrounds/fondo_soft_blush_sand.png"
-        className="py-24 md:py-28"
-        topGradient
-      >
-        <WeddingBeautyServices 
-          services={[
-            {
-              name: "Coquetta Salón de Belleza",
-              phone: "+529513101160",
-              instagram: { handle: "@coquettasalondebelleza", url: "https://instagram.com/coquettasalondebelleza" },
-              note: "Servicio profesional de maquillaje y peinado en Oaxaca.",
-            },
-            {
-              name: "Krasivo Studio Oaxaca",
-              phone: "+529511179639",
-              instagram: { handle: "@krasivo_oaxaca", url: "https://instagram.com/krasivo_oaxaca" },
-              note: "Especialistas en resaltar tu belleza natural para eventos especiales.",
-            },
-            {
-              name: "L'Yette Beauty Lab",
-              phone: "+529513922478",
-              instagram: { handle: "@lyette.oax", url: "https://instagram.com/lyette.oax" },
-              note: "Laboratorio de belleza con servicios personalizados de alta calidad.",
-            },
-          ]} 
-        />
-      </WeddingSection>
+          {/* Beauty Services */}
+          <WeddingSection
+            id="maquillaje"
+            title="Maquillaje & Peinado"
+            subtitle="Servicios profesionales recomendados para que luzcas espectacular."
+            className="py-24 md:py-28"
+            textureImage="/backgrounds/bg_maquillaje.svg"
+            backgroundSize="100% auto"
+            backgroundRepeat="repeat-y"
+            backgroundPosition="top center"
+          >
+            <WeddingBeautyServices 
+              services={[
+                {
+                  name: "Coquetta Salón de Belleza",
+                  phone: "+529513101160",
+                  instagram: { handle: "@coquettasalondebelleza", url: "https://instagram.com/coquettasalondebelleza" },
+                  note: "Servicio profesional de maquillaje y peinado en Oaxaca.",
+                },
+                {
+                  name: "Krasivo Studio Oaxaca",
+                  phone: "+529511179639",
+                  instagram: { handle: "@krasivo_oaxaca", url: "https://instagram.com/krasivo_oaxaca" },
+                  note: "Especialistas en resaltar tu belleza natural para eventos especiales.",
+                },
+                {
+                  name: "L'Yette Beauty Lab",
+                  phone: "+529513922478",
+                  instagram: { handle: "@lyette.oax", url: "https://instagram.com/lyette.oax" },
+                  note: "Laboratorio de belleza con servicios personalizados de alta calidad.",
+                },
+              ]} 
+            />
+          </WeddingSection>
 
-      {/* Cultural Recommendations */}
-      <WeddingSection
-        id="cultura"
-        title="Recomendaciones Culturales"
-        subtitle="Descubre la riqueza histórica y cultural de Oaxaca y sus alrededores."
-        textureImage="/backgrounds/fondo_soft_sage_green.png"
-        topGradient
-      >
-        <WeddingCulturalRecs lang="es" />
-      </WeddingSection>
+          {/* Cultural Recommendations */}
+          <WeddingSection
+            id="cultura"
+            title="Recomendaciones Culturales"
+            subtitle="Descubre la riqueza histórica y cultural de Oaxaca y sus alrededores."
+            textureImage="/backgrounds/bg_cultura.svg"
+            backgroundSize="100% auto"
+            backgroundRepeat="repeat-y"
+            backgroundPosition="top center"
+            noAnimation={true}
+          >
+            <WeddingCulturalRecs lang="es" />
+          </WeddingSection>
 
-      {/* Footer / Save the Date */}
-      <WeddingSection
-        bgColor="var(--bg-ivory)"
-        className="py-12 md:py-16"
-        withSeparator
-      >
-        <WeddingSaveTheDate
-          title="SAVE THE DATE"
-          date="12 de septiembre de 2026"
-          layout="comfortable"
-        />
-      </WeddingSection>
-    </main>
+          {/* Footer / Save the Date */}
+          <WeddingSection
+            className="py-12 md:py-16"
+          >
+            <WeddingSaveTheDate
+              title="SAVE THE DATE"
+              date="11 y 12 de septiembre de 2026"
+              layout="comfortable"
+            />
+          </WeddingSection>
+        </div>
+      </main>
   );
 }

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Radley:ital,wght@0,400;1,400&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
@@ -5,20 +7,20 @@
 
 @theme {
   --color-background: #F6F0E7;
-  --color-foreground: #1E1E1A;
+  --color-foreground: #3C3633;
   
   --color-bg-ivory: #F6F0E7;
   --color-bg-sand: #E8D9C5;
   --color-bg-blush: #F5DCD4;
   --color-bg-sage: #D5E0D5;
   
-  --color-ink: #1E1E1A;
-  --color-ink-2: rgba(30, 30, 26, 0.72);
-  --color-muted-custom: rgba(30, 30, 26, 0.55);
-  --color-border-custom: rgba(30, 30, 26, 0.08);
+  --color-ink: #3C3633;
+  --color-ink-2: rgba(60, 54, 51, 0.75);
+  --color-muted-custom: rgba(60, 54, 51, 0.55);
+  --color-border-custom: rgba(60, 54, 51, 0.1);
   
   --color-card: rgba(255, 255, 255, 0.78);
-  --color-card-foreground: #1E1E1A;
+  --color-card-foreground: #3C3633;
   
   --color-primary: #243A2B;
   --color-primary-foreground: #ffffff;
@@ -34,10 +36,16 @@
   --shadow-sm-custom: 0 6px 18px rgba(0, 0, 0, 0.05);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system;
-  --font-serif: "Radley", ui-serif, Georgia, serif;
+  --font-serif: "Libre Baskerville", "Cormorant Garamond", "Radley", ui-serif, Georgia, serif;
   --font-heading: var(--font-serif);
+  
+  --color-green-card: #919d82;
+  --color-green-highlight: #c2cfb2;
+    --color-pink-highlight: #b84269;
+    --color-cream: #f1e9df;
+    --color-mauve-beige: #d9c6b7;
 
-  --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-down: accordion-down 0.2s ease-out;
   @keyframes accordion-down {
     from { height: 0; }
     to { height: var(--radix-accordion-content-height); }
@@ -54,10 +62,10 @@
   --bg-sand: #E8D9C5;
   --bg-blush: #F5DCD4;
   --bg-sage: #D5E0D5;
-  --ink: #1E1E1A;
-  --ink-2: rgba(30, 30, 26, 0.72);
-  --muted: rgba(30, 30, 26, 0.55);
-  --border: rgba(30, 30, 26, 0.08);
+  --ink: #3C3633;
+  --ink-2: rgba(60, 54, 51, 0.75);
+  --muted: rgba(60, 54, 51, 0.55);
+  --border: rgba(60, 54, 51, 0.1);
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.05);
   --radius: 18px;
@@ -77,12 +85,12 @@
 }
 
 @layer utilities {
-  body {
-    font-family: var(--font-sans);
-    background-color: var(--color-background);
-    color: var(--ink);
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--color-background);
+      color: var(--ink);
+    }
   }
-}
 
 @layer base {
   h1, h2, h3, h4 {

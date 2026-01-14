@@ -3,32 +3,35 @@ import "./globals.css";
 import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
 import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
+import { RSVPProvider } from "@/lib/rsvp-context";
 
 export const metadata: Metadata = {
-  title: "SAVE THE DATE — 12.09.26 — Fernanda y Diego",
+  title: "Fernanda & Diego — 12 de septiembre de 2026",
   description:
-    "Fernanda & Diego — Oaxaca, México — 12 de septiembre de 2026. Acompáñanos a celebrar.",
+    "Nos hace muchísima ilusión compartir este momento contigo. Te enviamos la invitación a nuestra boda. ¡Será un gusto que nos acompañes!",
   openGraph: {
-    title: "SAVE THE DATE — 12.09.26 — Fernanda y Diego",
+    title: "Fernanda & Diego — 12 de septiembre de 2026",
     description:
-      "Fernanda & Diego — Oaxaca, México — 12 de septiembre de 2026.",
+      "Nos hace muchísima ilusión compartir este momento contigo. Te enviamos la invitación a nuestra boda. ¡Será un gusto que nos acompañes!",
     type: "website",
     locale: "es_MX",
     images: [
       {
         url:
-          "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757476063645-f3wef72rnce.png",
-        alt: "Logo Fernanda & Diego",
+          "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/Fernanda-Diego-invitation-oficial-2-1768430745395.png",
+        width: 1200,
+        height: 630,
+        alt: "Invitación de boda Fernanda & Diego",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SAVE THE DATE — 12.09.26 — Fernanda y Diego",
+    title: "Fernanda & Diego — 12 de septiembre de 2026",
     description:
-      "Fernanda & Diego — Oaxaca, México — 12 de septiembre de 2026.",
+      "Nos hace muchísima ilusión compartir este momento contigo. Te enviamos la invitación a nuestra boda. ¡Será un gusto que nos acompañes!",
     images: [
-      "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757476063645-f3wef72rnce.png",
+      "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/Fernanda-Diego-invitation-oficial-2-1768430745395.png",
     ],
   },
   icons: {
@@ -75,7 +78,9 @@ export default function RootLayout({
           data-debug="true"
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
-        {children}
+        <RSVPProvider>
+          {children}
+        </RSVPProvider>
         <VisualEditsMessenger />
       </body>
     </html>

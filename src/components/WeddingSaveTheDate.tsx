@@ -68,7 +68,7 @@ export default function WeddingSaveTheDate({
                 // stronger color for date
                 "text-primary",
                 // Smaller on mobile to fit in one line; scale up on larger screens
-                "text-2xl sm:text-4xl md:text-5xl lg:text-6xl",
+                "text-3xl sm:text-4xl md:text-5xl lg:text-6xl",
               ].join(" ")}
             >
               <span className="inline-block align-middle whitespace-nowrap break-words italic">{date}</span>

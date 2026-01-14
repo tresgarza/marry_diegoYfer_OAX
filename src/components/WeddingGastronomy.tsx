@@ -5,21 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { 
   Instagram, 
-  Coffee, 
-  UtensilsCrossed, 
-  Martini, 
   MapPin, 
-  Award, 
   Navigation, 
   ChevronRight, 
   Star, 
   Sparkles, 
   Landmark,
-  Map as MapIcon,
   X,
   Maximize2
 } from "lucide-react";
-import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
 import { WeddingMap } from "./WeddingMap";
 
@@ -68,17 +62,17 @@ const GASTRO_DATA: GastronomyItem[] = [
     description: "Café + panadería muy popular para desayuno; ideal si buscas algo casual pero bien hecho.",
     handle: "@panaeme",
     instagram: "https://www.instagram.com/panaeme/",
-    maps: "https://www.google.com/maps/search/?api=1&query=PAN%3AAM%20Oaxaca",
-    coords: { lat: 17.0645, lng: -96.7245 },
-    distanceToSantoDomingo: "250 m",
-    distanceToBerriozabal: "450 m"
+    maps: "https://www.google.com/maps/place/Pan:am+Abasolo/@17.0646,-96.7229,591m/data=!3m1!1e3!4m6!3m5!1s0x85c7223ed2790225:0xd280aaacda2a3879!8m2!3d17.0646!4d-96.7229!16s%2Fg%2F11bwm30qps",
+    coords: { lat: 17.0646, lng: -96.7229 },
+    distanceToSantoDomingo: "150 m",
+    distanceToBerriozabal: "250 m"
   },
   {
     id: "itanoni",
     category: "breakfast",
     name: "Itanoní Tetelas",
     price: "$",
-    distinction: "Guía MICHELIN (Selección)",
+    distinction: "Guía MICHELIN",
     tag: "Maíz oaxaqueño",
     description: "Antojitos de maíz (tetelas/memelas) con enfoque tradicional; auténtico y directo.",
     handle: "@itanonioficial",
@@ -98,7 +92,7 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@cafetradicionoax",
     instagram: "https://www.instagram.com/cafetradicionoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Tradici%C3%B3n%20Oaxaca",
-    coords: { lat: 17.0610, lng: -96.7260 },
+    coords: { lat: 17.0609, lng: -96.7262 },
     distanceToSantoDomingo: "650 m",
     distanceToBerriozabal: "850 m"
   },
@@ -112,7 +106,7 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@agua.que.canta",
     instagram: "https://www.instagram.com/agua.que.canta/",
     maps: "https://www.google.com/maps/search/?api=1&query=Agua%20Que%20Canta%20Oaxaca",
-    coords: { lat: 17.0620, lng: -96.7250 },
+    coords: { lat: 17.0615, lng: -96.7258 },
     distanceToSantoDomingo: "500 m",
     distanceToBerriozabal: "700 m"
   },
@@ -126,9 +120,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@panconmadre",
     instagram: "https://www.instagram.com/panconmadre/",
     maps: "https://www.google.com/maps/search/?api=1&query=Pan%20con%20Madre%20Oaxaca",
-    coords: { lat: 17.0670, lng: -96.7270 },
-    distanceToSantoDomingo: "400 m",
-    distanceToBerriozabal: "600 m"
+    coords: { lat: 17.0670, lng: -96.7210 },
+    distanceToSantoDomingo: "300 m",
+    distanceToBerriozabal: "500 m"
   },
   {
     id: "yegole",
@@ -156,9 +150,9 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@danzantesoaxaca",
     instagram: "https://www.instagram.com/danzantesoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Los%20Danzantes%20Oaxaca",
-    coords: { lat: 17.0660, lng: -96.7235 },
-    distanceToSantoDomingo: "100 m",
-    distanceToBerriozabal: "250 m"
+    coords: { lat: 17.0659, lng: -96.7236 },
+    distanceToSantoDomingo: "80 m",
+    distanceToBerriozabal: "350 m"
   },
   {
     id: "pitiona",
@@ -166,58 +160,58 @@ const GASTRO_DATA: GastronomyItem[] = [
     name: "La Pitiona",
     price: "$$$",
     tag: "Rooftop + autor",
-    description: "Cocina de autor con vibra de rooftop; buena para date night y experiencias más “chef-driven”.",
+    description: "Cocina de autor con vibra de rooftop; buena para date night y experiencias de autor.",
     handle: "@pitionaoax",
     instagram: "https://www.instagram.com/pitionaoax/",
-    maps: "https://www.google.com/maps/search/?api=1&query=La%20Pitiona%20Oaxaca",
-    coords: { lat: 17.0665, lng: -96.7230 },
-    distanceToSantoDomingo: "50 m",
-    distanceToBerriozabal: "200 m"
+    maps: "https://www.google.com/maps/place/Pitiona/@17.0664,-96.7238,1183m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85c72230a24aa91f:0x9bf57f718ec745f9!8m2!3d17.0664!4d-96.7238",
+    coords: { lat: 17.0664, lng: -96.7238 },
+    distanceToSantoDomingo: "100 m",
+    distanceToBerriozabal: "400 m"
   },
   {
     id: "casa-oaxaca",
     category: "meals",
-    name: "Casa Oaxaca (El Restaurante)",
+    name: "Casa Oaxaca",
     price: "$$$",
-    distinction: "Guía MICHELIN (Selección)",
+    distinction: "Guía MICHELIN",
     tag: "Clásico premium",
-    description: "Restaurante muy consolidado; cocina contemporánea y ambiente elegante (frecuente en rooftops/terraza).",
+    description: "Restaurante muy consolidado; cocina contemporánea y ambiente elegante.",
     handle: "@casaoaxacaelrestaurante",
     instagram: "https://www.instagram.com/casaoaxacaelrestaurante/",
-    maps: "https://www.google.com/maps/search/?api=1&query=Casa%20Oaxaca%20el%20Restaurante",
-    coords: { lat: 17.0664, lng: -96.7233 },
+    maps: "https://www.google.com/maps/place/Casa+Oaxaca+el+Restaurante/@17.0658,-96.7231,2365m/data=!3m1!1e3!4m7!3m6!1s0x85c7223e8ca4ad8f:0xebd33261b531a740!8m2!3d17.0658!4d-96.7231",
+    coords: { lat: 17.0658, lng: -96.7231 },
     distanceToSantoDomingo: "50 m",
-    distanceToBerriozabal: "200 m"
+    distanceToBerriozabal: "400 m"
   },
   {
     id: "quince-letras",
     category: "meals",
     name: "Las Quince Letras",
     price: "$$",
-    distinction: "Bib Gourmand (MICHELIN)",
+    distinction: "Bib Gourmand",
     tag: "Gran valor",
     description: "Cocina regional con excelente relación calidad-precio; gran “must” para sabores oaxaqueños.",
     handle: "@lasquinceletrasoax",
     instagram: "https://www.instagram.com/lasquinceletrasoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Las%20Quince%20Letras%20Oaxaca",
-    coords: { lat: 17.0648, lng: -96.7225 },
-    distanceToSantoDomingo: "250 m",
-    distanceToBerriozabal: "350 m"
+    coords: { lat: 17.0649, lng: -96.7220 },
+    distanceToSantoDomingo: "150 m",
+    distanceToBerriozabal: "250 m"
   },
   {
     id: "tierra-sol",
     category: "meals",
     name: "Tierra del Sol",
     price: "$$",
-    distinction: "Bib Gourmand (MICHELIN)",
+    distinction: "Bib Gourmand",
     tag: "Rooftop local",
     description: "Muy buen valor y experiencia; opción sólida para comer rico sin irte a $$$$.",
     handle: "@tierradelsolrestaurante",
     instagram: "https://www.instagram.com/tierradelsolrestaurante/",
     maps: "https://www.google.com/maps/search/?api=1&query=Tierra%20del%20Sol%20Oaxaca",
-    coords: { lat: 17.0652, lng: -96.7238 },
-    distanceToSantoDomingo: "150 m",
-    distanceToBerriozabal: "300 m"
+    coords: { lat: 17.0671, lng: -96.7208 },
+    distanceToSantoDomingo: "250 m",
+    distanceToBerriozabal: "450 m"
   },
   {
     id: "palapa-raul",
@@ -225,11 +219,11 @@ const GASTRO_DATA: GastronomyItem[] = [
     name: "La Palapa de Raúl",
     price: "$$",
     tag: "Tradicional",
-    description: "Oaxaqueño tradicional (antojitos/moles y comfort food local); opción confiable y sin pretensión.",
+    description: "Oaxaqueño tradicional; opción confiable y sin pretensión.",
     handle: "@lapalapaderaul.oax",
     instagram: "https://www.instagram.com/lapalapaderaul.oax/",
     maps: "https://www.google.com/maps/search/?api=1&query=La%20Palapa%20de%20Ra%C3%BAl%20Oaxaca",
-    coords: { lat: 17.0590, lng: -96.7180 },
+    coords: { lat: 17.0588, lng: -96.7178 },
     distanceToSantoDomingo: "1.0 km",
     distanceToBerriozabal: "1.1 km"
   },
@@ -238,13 +232,13 @@ const GASTRO_DATA: GastronomyItem[] = [
     category: "meals",
     name: "Criollo",
     price: "$$$$",
-    distinction: "Guía MICHELIN (Selección)",
+    distinction: "Guía MICHELIN",
     tag: "Tasting menu",
     description: "Experiencia de degustación (nivel alto); ideal si quieres una “gran cena” memorable.",
     handle: "@criollo_oax",
     instagram: "https://www.instagram.com/criollo_oax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Criollo%20Restaurante%20Oaxaca",
-    coords: { lat: 17.0630, lng: -93.7370 },
+    coords: { lat: 17.0630, lng: -96.7370 },
     distanceToSantoDomingo: "1.5 km",
     distanceToBerriozabal: "1.7 km"
   },
@@ -258,80 +252,54 @@ const GASTRO_DATA: GastronomyItem[] = [
     description: "Buena para pre/after; ambiente relajado y accesible.",
     handle: "@la_popular_oaxaca",
     instagram: "https://www.instagram.com/la_popular_oaxaca/",
-    maps: "https://www.google.com/maps/search/?api=1&query=La%20Popular%20Oaxaca",
-    coords: { lat: 17.0642, lng: -96.7238 },
-    distanceToSantoDomingo: "250 m",
-    distanceToBerriozabal: "400 m"
-  },
-  {
-    id: "otra-popular",
-    category: "drinks",
-    name: "La Otra Popular",
-    price: "$",
-    tag: "Bar accesible",
-    description: "Opción muy casual y “sin complicaciones”; buena para pasar por un drink rápido.",
-    maps: "https://www.google.com/maps/search/?api=1&query=La%20Otra%20Popular%20Oaxaca",
-    coords: { lat: 17.0650, lng: -96.7230 },
+    maps: "https://www.google.com/maps/search/?api=1&query=La%20Popular%20Oaxaca%20Allende",
+    coords: { lat: 17.0668, lng: -96.7243 },
     distanceToSantoDomingo: "150 m",
-    distanceToBerriozabal: "300 m"
+    distanceToBerriozabal: "500 m"
   },
   {
     id: "selva",
     category: "drinks",
     name: "Selva",
     price: "$$$",
-    distinction: "50 Best Discovery",
+    distinction: "50 Best",
     tag: "Coctelería de autor",
     description: "Barra creativa y de alto perfil; ideal si quieres coctelería “seria” y distinta.",
     handle: "@selvaoaxaca",
     instagram: "https://www.instagram.com/selvaoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Selva%20Oaxaca%20Cocktail%20Bar",
-    coords: { lat: 17.0660, lng: -96.7235 },
+    coords: { lat: 17.0659, lng: -96.7236 },
     distanceToSantoDomingo: "50 m",
-    distanceToBerriozabal: "200 m"
+    distanceToBerriozabal: "400 m"
   },
   {
     id: "sabina-sabe",
     category: "drinks",
     name: "Sabina Sabe",
     price: "$$$",
-    distinction: "North America’s 50 Best Bars",
+    distinction: "50 Best",
     tag: "Mezcal + cocktails",
     description: "Referente en mezcal/cócteles; gran parada si quieres una experiencia muy Oaxaca.",
     handle: "@sabinasabeoaxaca",
     instagram: "https://www.instagram.com/sabinasabeoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Sabina%20Sabe%20Oaxaca",
-    coords: { lat: 17.0640, lng: -96.7235 },
-    distanceToSantoDomingo: "300 m",
-    distanceToBerriozabal: "450 m"
+    coords: { lat: 17.0632, lng: -96.7242 },
+    distanceToSantoDomingo: "350 m",
+    distanceToBerriozabal: "250 m"
   },
   {
     id: "amantes-terraza",
     category: "drinks",
-    name: "Los Amantes (Terraza)",
+    name: "Terraza Los Amantes",
     price: "$$$",
     tag: "Rooftop vista",
-    description: "Terraza para cocteles con vista; gran spot para atardecer/noche.",
+    description: "Terraza para cocteles con vista espectacular; gran spot para el atardecer.",
     handle: "@terrazalosamantesoax",
     instagram: "https://www.instagram.com/terrazalosamantesoax/",
     maps: "https://www.google.com/maps/search/?api=1&query=Terraza%20Los%20Amantes%20Oaxaca",
     coords: { lat: 17.0665, lng: -96.7235 },
-    distanceToSantoDomingo: "50 m",
-    distanceToBerriozabal: "200 m"
-  },
-  {
-    id: "amantes-mezcal",
-    category: "drinks",
-    name: "Los Amantes (Mezcal)",
-    price: "$$–$$$",
-    tag: "Mezcalería",
-    description: "Opción enfocada en mezcal y cócteles; buena para algo más “mezcal-driven”.",
-    handle: "@losamantesmezcal",
-    instagram: "https://www.instagram.com/losamantesmezcal/",
-    maps: "https://www.google.com/maps/search/?api=1&query=Los%20Amantes%20Mezcal%20Oaxaca",
-    coords: { lat: 17.0665, lng: -96.7235 },
-    distanceToSantoDomingo: "50 m",
-    distanceToBerriozabal: "200 m"
+    distanceToSantoDomingo: "100 m",
+    distanceToBerriozabal: "450 m"
   },
   {
     id: "praga",
@@ -343,219 +311,217 @@ const GASTRO_DATA: GastronomyItem[] = [
     handle: "@pragaoaxaca",
     instagram: "https://www.instagram.com/pragaoaxaca/",
     maps: "https://www.google.com/maps/search/?api=1&query=Praga%20Oaxaca",
-    coords: { lat: 17.0615, lng: -96.7240 },
-    distanceToSantoDomingo: "550 m",
-    distanceToBerriozabal: "700 m"
+    coords: { lat: 17.0665, lng: -96.7236 },
+    distanceToSantoDomingo: "100 m",
+    distanceToBerriozabal: "450 m"
   },
 ];
 
-const CATEGORIES: { id: CategoryId; title: { es: string; en: string }; color: string }[] = [
-  { id: "breakfast", title: { es: "Desayuno/Brunch", en: "Breakfast/Brunch" }, color: "#B45309" },
-  { id: "meals", title: { es: "Comida/Cena", en: "Lunch/Dinner" }, color: "#059669" },
-  { id: "drinks", title: { es: "Drinks", en: "Drinks" }, color: "#5B21B6" },
+const CATEGORIES: { id: CategoryId; title: { es: string; en: string }; color: string; texture: string }[] = [
+    { 
+      id: "breakfast", 
+      title: { es: "Desayuno/Brunch", en: "Breakfast/Brunch" }, 
+      color: "#b84269",
+      texture: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/TARJETA_BLANCA-1767905973064.png?width=8000&height=8000&resize=contain"
+    },
+    { 
+      id: "meals", 
+      title: { es: "Comida/Cena", en: "Lunch/Dinner" }, 
+      color: "#c2cfb2",
+      texture: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/TARJETA_BLANCA-1767905973064.png?width=8000&height=8000&resize=contain"
+    },
+    { 
+      id: "drinks", 
+      title: { es: "Drinks", en: "Drinks" }, 
+      color: "#8C6A5D",
+      texture: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/TARJETA_BLANCA-1767905973064.png?width=8000&height=8000&resize=contain"
+    },
 ];
 
-  export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) {
-    const [activeTab, setActiveTab] = React.useState<CategoryId>(CATEGORIES[0].id);
-    const [activeItemId, setActiveItemId] = React.useState<string | null>(null);
+export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) {
+  const [activeTab, setActiveTab] = React.useState<CategoryId>(CATEGORIES[0].id);
+  const [activeItemId, setActiveItemId] = React.useState<string | null>(null);
+  const isLockedRef = React.useRef(false);
+  const lockTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const lastUpdateRef = React.useRef(Date.now());
+  const activeItemIdRef = React.useRef(activeItemId);
+  const sectionRef = React.useRef<HTMLDivElement>(null);
 
-    React.useEffect(() => {
-      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-        const firstItem = GASTRO_DATA.find(i => i.category === activeTab);
-        if (firstItem) setActiveItemId(firstItem.id);
-      }
-    }, [activeTab]);
+  React.useEffect(() => {
+    activeItemIdRef.current = activeItemId;
+  }, [activeItemId]);
 
-    const [isLocked, setIsLocked] = React.useState(false);
-    const sectionRef = React.useRef<HTMLDivElement>(null);
-    const lockTimerRef = React.useRef<NodeJS.Timeout | null>(null);
-    const observerRef = React.useRef<IntersectionObserver | null>(null);
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      const firstItem = GASTRO_DATA.find(i => i.category === activeTab);
+      if (firstItem) setActiveItemId(firstItem.id);
+    }
+  }, [activeTab]);
 
-    const lockObserver = (ms = 800) => {
-      setIsLocked(true);
-      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
-      lockTimerRef.current = setTimeout(() => setIsLocked(false), ms);
-    };
+  const lockObserver = (ms = 2500) => {
+    isLockedRef.current = true;
+    lastUpdateRef.current = Date.now();
+    if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
+    lockTimerRef.current = setTimeout(() => {
+      isLockedRef.current = false;
+    }, ms);
+  };
 
-    const filteredItems = GASTRO_DATA.filter(item => item.category === activeTab);
+  const filteredItems = GASTRO_DATA.filter(item => item.category === activeTab);
 
-    const activeItemIdRef = React.useRef(activeItemId);
-    const lastUpdateRef = React.useRef(Date.now());
+  React.useEffect(() => {
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      if (isLockedRef.current || Date.now() - lastUpdateRef.current < 200) return;
+      if (window.innerWidth < 1024) return;
 
-    React.useEffect(() => {
-      activeItemIdRef.current = activeItemId;
-    }, [activeItemId]);
-
-    React.useEffect(() => {
-      const callback = (entries: IntersectionObserverEntry[]) => {
-        if (isLocked || Date.now() - lastUpdateRef.current < 100) return;
-        
-        // Disable auto-open on mobile
-        if (window.innerWidth < 1024) return;
-
-        let bestCandidate: { id: string, ratio: number } | null = null;
-        
-        entries.forEach(entry => {
-          const itemId = entry.target.getAttribute('data-gastro-id');
-          if (itemId && entry.isIntersecting) {
-            if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
-              bestCandidate = { id: itemId, ratio: entry.intersectionRatio };
-            }
-          }
-        });
-
-        if (bestCandidate && bestCandidate.id !== activeItemIdRef.current) {
-          if (bestCandidate.ratio > 0.4) {
-            setActiveItemId(bestCandidate.id);
-            lastUpdateRef.current = Date.now();
+      let bestCandidate: { id: string, ratio: number } | null = null;
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('data-gastro-id');
+        if (id && entry.isIntersecting) {
+          if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
+            bestCandidate = { id, ratio: entry.intersectionRatio };
           }
         }
-      };
-
-      observerRef.current = new IntersectionObserver(callback, {
-        threshold: [0.2, 0.4, 0.6, 0.8],
-        rootMargin: "-30% 0px -30% 0px"
       });
 
-      const currentObserver = observerRef.current;
-      const cards = document.querySelectorAll('[data-gastro-id]');
-      cards.forEach(card => currentObserver.observe(card));
+      if (bestCandidate && bestCandidate.id !== activeItemIdRef.current && bestCandidate.ratio > 0.4) {
+        setActiveItemId(bestCandidate.id);
+        lastUpdateRef.current = Date.now();
+      }
+    };
 
-      return () => currentObserver.disconnect();
-    }, [isLocked, activeTab]);
+    const observer = new IntersectionObserver(callback, {
+      threshold: [0.1, 0.4, 0.7, 1.0],
+      rootMargin: "-25% 0px -25% 0px"
+    });
 
-    const handleTabChange = (catId: CategoryId) => {
-      lockObserver(1500);
-      setActiveTab(catId);
-      
-      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-        const firstItem = GASTRO_DATA.find(i => i.category === catId);
-        if (firstItem) setActiveItemId(firstItem.id);
+    const cards = document.querySelectorAll('[data-gastro-id]');
+    cards.forEach(card => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, [activeTab]);
+
+  const handleScrollToCard = (id: string) => {
+    const elementId = `gastro-${id}`;
+    const element = document.getElementById(elementId);
+    if (element) {
+      lockObserver(2500);
+      setActiveItemId(id);
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
+  const handleTabChange = (catId: CategoryId) => {
+    lockObserver(2500);
+    setActiveTab(catId);
+    
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      const firstItem = GASTRO_DATA.find(i => i.category === catId);
+      if (firstItem) setActiveItemId(firstItem.id);
+    } else {
+      setActiveItemId(null);
+    }
+    
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const handleMarkerClick = (marker: any) => {
+    const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
+    if (item) {
+      if (item.category !== activeTab) {
+        setActiveTab(item.category as CategoryId);
+        setTimeout(() => handleScrollToCard(item.id), 400);
       } else {
-        setActiveItemId(null);
+        handleScrollToCard(item.id);
       }
-      
-      if (sectionRef.current) {
-        sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    };
+    }
+  };
 
-    const handleItemClick = (id: string) => {
-      lockObserver(1000);
-      setActiveItemId(prev => {
-        if (window.innerWidth < 1024) {
-          return prev === id ? null : id;
-        }
-        return id;
-      });
-
-      if (window.innerWidth < 1024) {
-        const element = document.getElementById(`gastro-${id}`);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }
-    };
-
-    const handleMarkerClick = (marker: any) => {
-      const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
-      if (item) {
-        if (item.category !== activeTab) {
-          setActiveTab(item.category as CategoryId);
-        }
-        handleItemClick(item.id);
-      }
-    };
-
-    return (
-      <div ref={sectionRef} className="w-full">
-        {/* Category Tabs */}
-        <div className="flex justify-center mb-6 lg:mb-12 sticky top-16 md:top-20 z-40 py-4">
-          <div className="inline-flex p-1.5 bg-white/80 backdrop-blur-md rounded-full border border-ink/10 shadow-lg">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleTabChange(cat.id)}
-                className={cn(
-                  "flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full text-[12px] lg:text-sm font-black transition-all duration-300 whitespace-nowrap",
-                  activeTab === cat.id
-                    ? "text-white shadow-lg"
-                    : "text-ink/60 hover:text-ink hover:bg-white/50"
-                )}
-                style={{
-                  backgroundColor: activeTab === cat.id ? cat.color : "transparent"
-                }}
-              >
-                {cat.title[lang]}
-              </button>
-            ))}
-          </div>
+  return (
+    <div ref={sectionRef} className="w-full">
+      <div className="flex justify-center mb-6 lg:mb-12 sticky top-16 md:top-20 z-40 py-4">
+        <div className="inline-flex p-1.5 bg-white/80 backdrop-blur-md rounded-full border border-ink/10 shadow-lg">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => handleTabChange(cat.id)}
+              className={cn(
+                "flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-full text-[12px] lg:text-sm font-black transition-all duration-300 whitespace-nowrap",
+                activeTab === cat.id ? "text-white shadow-lg" : "text-ink/60 hover:text-ink hover:bg-white/50"
+              )}
+              style={{ backgroundColor: activeTab === cat.id ? cat.color : "transparent" }}
+            >
+              {cat.title[lang]}
+            </button>
+          ))}
         </div>
+      </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
-          {/* Sticky Map Column (Desktop Only) */}
-          <div className="hidden lg:block w-[42%] sticky top-[120px] z-30">
-            <div className="h-[500px] w-full rounded-[2.5rem] overflow-hidden border-2 border-white shadow-[0_20px_40px_rgba(0,0,0,0.12)] relative group">
+      <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
+        <div className="hidden lg:block w-[42%] sticky top-[120px] z-30">
+            <div className="h-[500px] w-full rounded-[2.5rem] overflow-hidden border-2 border-white shadow-2xl relative group">
               <WeddingMap 
                 compact={true}
-                activeMarkerId={activeItemId || undefined}
-                filterTypes={["gastronomy"]}
-                onMarkerClick={handleMarkerClick}
-                offsetX={-60}
-                offsetY={40}
-                customLegend={CATEGORIES.map(c => ({
-                  label: c.title[lang],
-                  color: c.color
-                }))}
+                activeMarkerId={activeItemId}
+                filterTypes={["gastronomy", "event"]}
+                  onMarkerClick={handleMarkerClick}
+                  offsetX={-60}
+                  offsetY={40}
+                  autoFit={false}
+                  defaultZoom={15}
+                  activeZoom={15}
+                  customLegend={[
+                    { label: "BODA", color: "#C66B3D", emoji: "⛪" },
+                    ...CATEGORIES.map(c => ({ label: c.title[lang], color: c.color }))
+                  ]}
                 markerColorOverride={(marker) => {
+                  if (marker.type === "event") return "#C66B3D";
                   const item = GASTRO_DATA.find(i => i.id === marker.id || i.name === marker.name);
-                  if (item) {
-                    return CATEGORIES.find(c => c.id === item.category)?.color || "#27AE60";
-                  }
-                  return "#27AE60";
+                  return item ? CATEGORIES.find(c => c.id === item.category)?.color || "#059669" : "#059669";
                 }}
               />
               <div className="absolute top-4 right-4 z-50">
-                <Link
-                  href="/mapa"
-                  className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm hover:bg-white text-ink rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg border border-ink/5 group"
-                >
-                  <Maximize2 className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
-                  <span>Ver mapa completo</span>
-                </Link>
-              </div>
+              <Link href="/mapa" className="flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm hover:bg-white text-ink rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-lg border border-ink/5 group">
+                <Maximize2 className="h-3.5 w-3.5 group-hover:scale-110 transition-transform" />
+                <span>Ver mapa completo</span>
+              </Link>
             </div>
           </div>
+        </div>
 
-          {/* List Column */}
-          <div className="w-full lg:w-[58%] space-y-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.4 }}
-                className="grid gap-6"
-              >
-                {filteredItems.map((item) => (
+        <div className="w-full lg:w-[58%] space-y-6">
+          <AnimatePresence mode="wait">
+            <motion.div key={activeTab} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }} className="grid gap-6">
+              {filteredItems.map((item) => {
+                const category = CATEGORIES.find(c => c.id === item.category);
+                return (
                   <GastroCard 
                     key={item.id} 
                     item={item} 
                     isActive={activeItemId === item.id}
-                    onClick={() => handleItemClick(item.id)}
+                    onClick={() => {
+                      if (window.innerWidth < 1024) {
+                        setActiveItemId(prev => prev === item.id ? null : item.id);
+                      } else {
+                        handleScrollToCard(item.id);
+                      }
+                    }}
                     onMarkerClick={handleMarkerClick}
                     lang={lang}
-                    color={CATEGORIES.find(c => c.id === item.category)?.color}
+                    color={category?.color}
+                    texture={category?.texture}
                   />
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
 function GastroCard({ 
   item, 
@@ -563,7 +529,8 @@ function GastroCard({
   onClick,
   onMarkerClick,
   lang,
-  color
+  color,
+  texture
 }: { 
   item: GastronomyItem; 
   isActive: boolean;
@@ -571,231 +538,92 @@ function GastroCard({
   onMarkerClick?: (marker: any) => void;
   lang: Language;
   color?: string;
+  texture?: string;
 }) {
   return (
     <motion.div
       id={`gastro-${item.id}`}
       data-gastro-id={item.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ 
-        opacity: 1, 
-        scale: 1,
-        y: 0 
-      }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={onClick}
       className={cn(
-        "relative w-full max-w-[360px] mx-auto lg:max-w-none bg-white rounded-2xl lg:rounded-[2rem] overflow-hidden transition-all duration-300 cursor-pointer border-2",
-        isActive 
-          ? "shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-neutral-200 z-10" 
-          : "shadow-none border-neutral-100 hover:bg-neutral-50/50"
+        "relative w-full max-w-[360px] mx-auto lg:max-w-none overflow-hidden transition-all duration-300 cursor-pointer",
+        isActive ? "shadow-2xl z-10" : "shadow-none hover:bg-neutral-50/50"
       )}
+      style={{
+        borderRadius: "1.5rem 1.6rem 1.4rem 1.7rem / 1.6rem 1.5rem 1.7rem 1.4rem",
+        border: "1px solid rgba(0,0,0,0.08)",
+        borderBottomWidth: "3px",
+        borderBottomColor: isActive ? `${color}33` : "rgba(0, 0, 0, 0.1)",
+      }}
     >
-      <div className="p-4 lg:p-8 flex flex-col gap-3 lg:gap-5">
-        {/* Header Section */}
+        {texture && (
+          <div className="absolute inset-0 z-0">
+            <img src={texture} alt="" className="w-full h-full object-cover" />
+          </div>
+        )}
+      <div className="relative z-10 p-4 lg:p-8 flex flex-col gap-3 lg:gap-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col gap-1">
-            <h4 className="font-heading text-[18px] lg:text-2xl text-ink leading-tight group-hover:text-primary transition-colors">
-              {item.name}
-            </h4>
-            {/* Badges */}
+            <h4 className="font-heading text-[18px] lg:text-2xl text-ink leading-tight">{item.name}</h4>
             <div className="flex flex-wrap items-center gap-2 mt-1">
-              <span 
-                className="px-2 lg:px-3 py-0.5 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest text-white shadow-sm"
-                style={{ backgroundColor: color }}
-              >
-                {item.price}
-              </span>
-              {item.distinction && (
-                <span className="px-2 lg:px-3 py-0.5 bg-primary/10 text-primary rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest border border-primary/20 flex items-center gap-1">
-                  <Star className="h-2.5 w-2.5 fill-current" />
-                  {item.distinction}
-                </span>
-              )}
-              <span className="px-2 lg:px-3 py-0.5 bg-neutral-100 text-ink/40 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest border border-neutral-200">
-                {item.tag}
-              </span>
+              <span className="px-2 lg:px-3 py-0.5 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest text-white shadow-sm" style={{ backgroundColor: color }}>{item.price}</span>
+              {item.distinction && <span className="px-2 lg:px-3 py-0.5 bg-primary/10 text-primary rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest border border-primary/20 flex items-center gap-1"><Star className="h-2.5 w-2.5 fill-current" />{item.distinction}</span>}
+              <span className="px-2 lg:px-3 py-0.5 bg-white/40 text-ink/40 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest border border-black/5 backdrop-blur-sm">{item.tag}</span>
             </div>
           </div>
         </div>
-
-        <div className="bg-neutral-50 p-3 lg:p-4 rounded-2xl border border-neutral-100">
-          <p className={cn(
-            "text-[12px] lg:text-[14px] text-ink/70 leading-relaxed font-medium transition-all duration-300",
-            !isActive ? "line-clamp-2" : "line-clamp-none"
-          )}>
-            {item.description}
-          </p>
+        <div className="bg-white/40 backdrop-blur-sm p-3 lg:p-4 rounded-2xl border border-black/5">
+          <p className={cn("text-[12px] lg:text-[14px] text-ink/70 leading-relaxed font-medium transition-all duration-300", !isActive ? "line-clamp-2" : "line-clamp-none")}>{item.description}</p>
         </div>
-
-        {/* Action bar shown when collapsed - Mobile Only */}
         {!isActive && (
           <div className="flex flex-col items-center gap-3 pt-1 lg:hidden">
             <div className="flex w-full gap-2">
-              <a
-                href={item.maps}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-secondary text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <span>Cómo llegar</span>
-                <Navigation className="h-3 w-3" />
-              </a>
-              {item.instagram && (
-                <a
-                  href={item.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-ink text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <span>Instagram</span>
-                  <Instagram className="h-3 w-3" />
-                </a>
-              )}
-            </div>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-secondary/60">
-              ver más detalles
-            </span>
+                <a href={item.maps} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm" style={{ backgroundColor: color }} onClick={(e) => e.stopPropagation()}><Navigation className="h-3 w-3" /><span>Cómo llegar</span></a>
+                {item.instagram && <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm" style={{ backgroundColor: '#243A2B' }} onClick={(e) => e.stopPropagation()}><Instagram className="h-3 w-3" /><span>Instagram</span></a>}
+              </div>
+            <span className="text-[10px] uppercase tracking-[0.2em] text-secondary/60">ver más detalles</span>
           </div>
         )}
-
-        {/* Detailed Content (Mobile Expansion) */}
         <AnimatePresence>
           {isActive && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="flex flex-col gap-4 lg:hidden overflow-hidden"
-            >
-              {/* Mobile Interactive Map */}
-              <div
-                className="lg:hidden w-full h-[110px] rounded-2xl overflow-hidden border border-neutral-100 shadow-inner relative pointer-events-none"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <WeddingMap 
-                  compact={true}
-                  activeMarkerId={item.id}
-                  filterTypes={["gastronomy"]}
-                  onMarkerClick={onMarkerClick}
-                  hideUI={true}
-                  hideLegend={true}
-                />
-              </div>
-
-              {/* Distance Info */}
-              <div className="grid grid-cols-2 gap-4 py-3 border-y border-neutral-100 bg-neutral-50/50 -mx-4 px-4">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[8px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span>
-                    <div className="flex items-center gap-2 text-ink font-bold text-[11px]">
-                      <Landmark className="h-3.5 w-3.5 text-primary" />
-                      <span>{item.distanceToSantoDomingo || "–"}</span>
-                    </div>
-                  </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[8px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span>
-                  <div className="flex items-center gap-2 text-ink font-bold text-[11px]">
-                    <Sparkles className="h-3.5 w-3.5 text-secondary" />
-                    <span>{item.distanceToBerriozabal || "–"}</span>
-                  </div>
+            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="flex flex-col gap-4 lg:hidden overflow-hidden">
+                <div className="lg:hidden w-full h-[110px] rounded-2xl overflow-hidden border border-neutral-100 shadow-inner relative pointer-events-none" onClick={(e) => e.stopPropagation()}>
+                    <WeddingMap 
+                      compact={true} 
+                      activeMarkerId={item.id} 
+                      filterTypes={["gastronomy", "event"]} 
+                      onMarkerClick={onMarkerClick} 
+                      hideUI={true} 
+                      hideLegend={true} 
+                      activeZoom={14}
+                    />
                 </div>
+              <div className="grid grid-cols-2 gap-4 py-3 border-y border-black/5 bg-white/40 backdrop-blur-sm -mx-4 px-4">
+                <div className="flex flex-col gap-1"><span className="text-[8px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span><div className="flex items-center gap-2 text-ink font-bold text-[11px]"><Landmark className="h-3.5 w-3.5 text-primary" /><span>{item.distanceToSantoDomingo || "–"}</span></div></div>
+                <div className="flex flex-col gap-1"><span className="text-[8px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span><div className="flex items-center gap-2 text-ink font-bold text-[11px]"><Sparkles className="h-3.5 w-3.5 text-secondary" /><span>{item.distanceToBerriozabal || "–"}</span></div></div>
               </div>
-
-              <div className="flex flex-col gap-3 pt-2">
-                 <a
-                  href={item.maps}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-3 bg-secondary text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all hover:bg-ink active:scale-[0.98] shadow-md"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <span>Cómo llegar</span>
-                  <Navigation className="h-4 w-4" />
-                </a>
-                
-                {item.instagram && (
-                    <a
-                      href={item.instagram}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3 bg-ink text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all hover:bg-secondary active:scale-[0.98] shadow-md"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <span>Instagram</span>
-                      <Instagram className="h-4 w-4" />
-                    </a>
-                )}
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onClick?.();
-                  }}
-                  className="flex items-center justify-center gap-2 w-full py-3 bg-neutral-100 text-ink rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all hover:bg-neutral-200"
-                >
-                  <span>Ver menos</span>
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
+                <div className="flex flex-col gap-3 pt-2">
+                  <a href={item.maps} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-md" style={{ backgroundColor: color }} onClick={(e) => e.stopPropagation()}><span>Cómo llegar</span><Navigation className="h-4 w-4" /></a>
+                  {item.instagram && <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-md" style={{ backgroundColor: '#243A2B' }} onClick={(e) => e.stopPropagation()}><span>Instagram</span><Instagram className="h-4 w-4" /></a>}
+                  <button onClick={(e) => { e.stopPropagation(); onClick?.(); }} className="flex items-center justify-center gap-2 w-full py-3 bg-white/40 backdrop-blur-sm text-ink rounded-2xl text-[10px] font-black uppercase tracking-widest border border-black/5"><span>Ver menos</span><X className="h-3 w-3" /></button>
+                </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Desktop Only Distance & Links */}
         <div className="hidden lg:flex flex-col gap-5">
-          {/* Distance Info */}
-          <div className="grid grid-cols-2 gap-4 py-2.5 lg:py-4 border-y border-neutral-100 bg-neutral-50/50 -mx-8 px-8">
-              <div className="flex flex-col gap-1">
-                <span className="text-[8px] lg:text-[9px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span>
-                <div className="flex items-center gap-2 text-ink font-bold text-[11px] lg:text-xs">
-                  <Landmark className="h-3.5 w-3.5 text-primary" />
-                  <span>{item.distanceToSantoDomingo || "–"}</span>
-                </div>
-              </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-[8px] lg:text-[9px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span>
-              <div className="flex items-center gap-2 text-ink font-bold text-[11px] lg:text-xs">
-                <Sparkles className="h-3.5 w-3.5 text-secondary" />
-                <span>{item.distanceToBerriozabal || "–"}</span>
-              </div>
-            </div>
+          <div className="grid grid-cols-2 gap-4 py-2.5 lg:py-4 border-y border-black/5 bg-white/40 backdrop-blur-sm -mx-8 px-8">
+            <div className="flex flex-col gap-1"><span className="text-[8px] lg:text-[9px] font-black text-ink/30 uppercase tracking-widest">A Templo Santo Domingo</span><div className="flex items-center gap-2 text-ink font-bold text-[11px] lg:text-xs"><Landmark className="h-3.5 w-3.5 text-primary" /><span>{item.distanceToSantoDomingo || "–"}</span></div></div>
+            <div className="flex flex-col gap-1"><span className="text-[8px] lg:text-[9px] font-black text-ink/30 uppercase tracking-widest">A Berriozabal 120</span><div className="flex items-center gap-2 text-ink font-bold text-[11px] lg:text-xs"><Sparkles className="h-3.5 w-3.5 text-secondary" /><span>{item.distanceToBerriozabal || "–"}</span></div></div>
           </div>
-
-          <div className="flex items-center justify-between pt-1 lg:pt-2">
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={item.maps}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[11px] lg:text-xs font-black uppercase tracking-widest text-secondary hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Navigation className="h-4 w-4" />
-                {lang === 'es' ? 'Cómo llegar' : 'Get directions'}
-              </a>
-              {item.instagram && (
-                <a
-                  href={item.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[11px] lg:text-xs font-black uppercase tracking-widest text-ink/30 hover:text-ink transition-colors"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Instagram className="h-4 w-4" />
-                  {item.handle}
-                </a>
-              )}
+            <div className="flex items-center justify-between pt-1 lg:pt-2">
+              <div className="flex flex-wrap items-center gap-4">
+                <a href={item.maps} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[11px] lg:text-xs font-black uppercase tracking-widest hover:underline" style={{ color: color }} onClick={(e) => e.stopPropagation()}><Navigation className="h-4 w-4" />{lang === 'es' ? 'Cómo llegar' : 'Get directions'}</a>
+                {item.instagram && <a href={item.instagram} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[11px] lg:text-xs font-black uppercase tracking-widest hover:opacity-80 transition-opacity" style={{ color: '#243A2B' }} onClick={(e) => e.stopPropagation()}><Instagram className="h-4 w-4" />{item.handle}</a>}
+              </div>
+              <ChevronRight className={cn("h-5 w-5 transition-all duration-500 hidden md:block", isActive ? "text-secondary translate-x-0" : "text-ink/10 -translate-x-2")} />
             </div>
-            <ChevronRight className={cn(
-              "h-5 w-5 transition-all duration-500 hidden md:block",
-              isActive ? "text-secondary translate-x-0" : "text-ink/10 -translate-x-2"
-            )} />
-          </div>
         </div>
       </div>
     </motion.div>
   );
 }
-

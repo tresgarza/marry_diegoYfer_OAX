@@ -66,9 +66,13 @@ export default function WeddingBeautyServices({
 }: WeddingBeautyServicesProps) {
   return (
     <WeddingGrid columns={3}>
-      {services.map((svc) => (
-        <WeddingCard key={svc.name} className="h-full flex flex-col noPadding">
-          {/* Header */}
+        {services.map((svc) => (
+          <WeddingCard
+            key={svc.name}
+            className="h-full flex flex-col noPadding"
+            textureImage="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/TARJETA_BLANCA-1767906668565.png?width=8000&height=8000&resize=contain"
+          >
+            {/* Header */}
           <div className="px-6 pt-6 pb-4">
             <h3 className="font-heading text-xl md:text-2xl text-ink mb-2 leading-tight">
               {svc.name}
@@ -81,29 +85,31 @@ export default function WeddingBeautyServices({
           </div>
 
           {/* Actions */}
-          <div className="mt-auto px-6 pb-6 pt-2 border-t border-ink/[0.08] flex flex-col gap-2">
-            <WeddingButton
-              as="a"
-              href={`tel:${svc.phone}`}
-              variant="secondary"
-              className="w-full text-sm py-2.5 flex items-center justify-center gap-2"
-            >
-              <PhoneCall className="h-4 w-4" />
-              {formatPhoneForDisplay(svc.phone)}
-            </WeddingButton>
-
-            {svc.instagram && (
-              <a
-                href={svc.instagram.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-medium text-ink/60 hover:text-ink/80 transition-colors flex items-center justify-center gap-1.5"
+            <div className="mt-auto px-6 pb-6 pt-2 border-t border-ink/[0.08] flex flex-col gap-2">
+              <WeddingButton
+                as="a"
+                href={`tel:${svc.phone}`}
+                variant="secondary"
+                className="w-full text-sm py-2.5 flex items-center justify-center gap-2"
+                style={{ color: "#243A2B", borderColor: "rgba(36, 58, 43, 0.2)" }}
               >
-                <Instagram className="h-3.5 w-3.5" />
-                {svc.instagram.handle}
-              </a>
-            )}
-          </div>
+                <PhoneCall className="h-4 w-4" />
+                {formatPhoneForDisplay(svc.phone)}
+              </WeddingButton>
+
+              {svc.instagram && (
+                <a
+                  href={svc.instagram.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+                  style={{ color: "#b84269" }}
+                >
+                  <Instagram className="h-3.5 w-3.5" />
+                  {svc.instagram.handle}
+                </a>
+              )}
+            </div>
         </WeddingCard>
       ))}
     </WeddingGrid>

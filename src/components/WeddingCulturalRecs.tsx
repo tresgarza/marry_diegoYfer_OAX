@@ -20,7 +20,7 @@ const RICH_CATEGORIES = [
       {
         name: "Centro Histórico de Oaxaca",
         desc: "Patrimonio Mundial, calles empedradas, arquitectura colonial y vida cultural vibrante.",
-        href: "https://www.google.com/maps/search/?api=1&query=Centro%20Hist%C3%B3rico%20de%20Oaxaca",
+        href: "https://www.google.com/maps/place/UNESCO+Centro+Hist%C3%B3rico+Patrimonio+Cultural+de+la+Humanidad/@17.0654528,-96.7237981,2365m/data=!3m1!1e3!4m7!3m6!1s0x85c723e1a249c5a7:0xab9f9f9e5b317dbe!8m2!3d17.0654528!4d-96.7237981!15sChtDZW50cm8gSGlzdMOzcmljbyBkZSBPYXhhY2FaHSIbY2VudHJvIGhpc3TDs3JpY28gZGUgb2F4YWNhkgETaGlzdG9yaWNhbF9sYW5kbWFya5oBI0NoWkRTVWhOTUc5blMwVkpRMEZuU1VRNWFWazJZbVYzRUFF4AEA-gEECAAQGQ!16s%2Fg%2F11tg6b8jyh",
       },
       {
         name: "Templo de Santo Domingo de Guzmán",
@@ -32,11 +32,11 @@ const RICH_CATEGORIES = [
         desc: "Ubicado en Santo Domingo, alberga tesoros prehispánicos como la Tumba 7 de Monte Albán.",
         href: "https://www.google.com/maps/search/?api=1&query=Museo%20de%20las%20Culturas%20de%20Oaxaca",
       },
-      {
-        name: "Museo de San Pedro y San Pablo",
-        desc: "Arte contemporáneo y exposiciones en un ex convento restaurado.",
-        href: "https://www.google.com/maps/search/?api=1&query=Museo%20de%20San%20Pedro%20y%20San%20Pablo%20Oaxaca",
-      },
+        {
+          name: "Centro Cultural San Pablo",
+          desc: "Centro cultural en un ex convento restaurado con exposiciones de arte y diseño.",
+          href: "https://www.google.com/maps/place/Centro+Cultural+San+Pablo/@17.0608229,-96.7233039",
+        },
       {
         name: "Teatro Macedonio Alcalá",
         desc: "Teatro art nouveau inaugurado en 1909, sede de conciertos y artes escénicas.",
@@ -78,14 +78,19 @@ const RICH_CATEGORIES = [
         desc: "Cascadas petrificadas y pozas minerales con miradores espectaculares al valle.",
         href: "https://www.google.com/maps/search/?api=1&query=Hierve%20el%20Agua",
       },
-      {
-        name: "San Martín Tilcajete",
-        desc: "Cuna de los alebrijes, coloridas figuras de madera talladas y pintadas a mano.",
-        href: "https://www.google.com/maps/search/?api=1&query=San%20Mart%C3%ADn%20Tilcajete",
-      },
-    ],
-  },
-];
+        {
+          name: "San Martín Tilcajete",
+          desc: "Cuna de los alebrijes, coloridas figuras de madera talladas y pintadas a mano.",
+          href: "https://www.google.com/maps/search/?api=1&query=San%20Mart%C3%ADn%20Tilcajete",
+        },
+        {
+          name: "Árbol del Tule",
+          desc: "El árbol con el diámetro de tronco más grande del mundo, una maravilla natural de más de 2,000 años.",
+          href: "https://www.google.com/maps/place/Tree+of+Tule/@17.0466207,-96.6362233",
+        },
+      ],
+    },
+  ];
 
 export default function WeddingCulturalRecs({
   lang = "es",

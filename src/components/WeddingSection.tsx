@@ -4,42 +4,49 @@ import * as React from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
-interface WeddingSectionProps {
-  id?: string
-  title?: string
-  subtitle?: string
-  bgColor?: string
-  textureImage?: string
-  textureOpacity?: number
-  children: React.ReactNode
-  className?: string
-  containerClassName?: string
-    withSeparator?: boolean
-    topGradient?: boolean
-    maxWidth?: string
-    noAnimation?: boolean
-  }
-  
-  export function WeddingSection({
-    id,
-    title,
-    subtitle,
-    bgColor = "var(--bg-ivory)",
-    textureImage,
-    textureOpacity = 0.5,
+  interface WeddingSectionProps {
+    id?: string
+    title?: string
+    subtitle?: string
+    bgColor?: string
+    textureImage?: string
+    textureOpacity?: number
+    backgroundSize?: string
+    backgroundRepeat?: string
+    backgroundPosition?: string
+    children: React.ReactNode
+    className?: string
+    containerClassName?: string
+      withSeparator?: boolean
+      topGradient?: boolean
+      maxWidth?: string
+      noAnimation?: boolean
+    }
+    
+    export function WeddingSection({
+      id,
+      title,
+      subtitle,
+      bgColor = "transparent",
+      textureImage,
+      textureOpacity = 1,
+    backgroundSize = "cover",
+    backgroundRepeat = "no-repeat",
+    backgroundPosition = "center",
     children,
     className,
-    containerClassName,
-    maxWidth,
-    noAnimation = false,
-  }: WeddingSectionProps) {
-
-  const backgroundStyle = textureImage ? {
-    backgroundImage: `url(${textureImage})`,
-    backgroundSize: "cover" as const,
-    backgroundPosition: "center" as const,
-    backgroundRepeat: "no-repeat" as const,
-  } : undefined;
+      containerClassName,
+      maxWidth,
+      noAnimation = false,
+    }: WeddingSectionProps) {
+  
+      const backgroundStyle = textureImage ? {
+        backgroundImage: `url(${textureImage})`,
+        backgroundSize: backgroundSize as any,
+        backgroundPosition: backgroundPosition as any,
+        backgroundRepeat: backgroundRepeat as any,
+        opacity: textureOpacity,
+      } : undefined;
 
   return (
     <section
