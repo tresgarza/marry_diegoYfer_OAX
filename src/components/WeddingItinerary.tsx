@@ -262,7 +262,7 @@ function TimelineItem({ event, index, onInView, onClick, isActive, alignment = "
           <div className="relative z-10">
               <div className={cn("flex items-center gap-3 mb-1 lg:mb-3", isLeft ? "flex-row lg:flex-row-reverse" : "flex-row-reverse lg:flex-row", "justify-between")}>
                 <span className={cn("text-[13px] font-black px-3 py-1 rounded-full uppercase tracking-wider", isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>{event.time}</span>
-                <div className={cn("p-1 lg:p-1.5 rounded-lg transition-colors", isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>{React.cloneElement(event.icon as React.ReactElement, { className: "h-4 w-4" })}</div>
+                <div className={cn("p-1 lg:p-1.5 rounded-lg transition-colors", isActive ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>{React.cloneElement(event.icon as React.ReactElement<any>, { className: "h-4 w-4" })}</div>
               </div>
               <h4 className="font-heading text-[20px] lg:text-xl text-foreground mb-1">{event.title}</h4>
               <p className={cn("text-[16px] lg:text-[15px] text-muted-foreground leading-relaxed mb-2 lg:mb-3 transition-all duration-300", !isActive && "lg:line-clamp-none line-clamp-2")}>{event.description}</p>

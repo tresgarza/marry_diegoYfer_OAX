@@ -372,21 +372,26 @@ export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) 
   React.useEffect(() => {
     const callback = (entries: IntersectionObserverEntry[]) => {
       if (isLockedRef.current || Date.now() - lastUpdateRef.current < 200) return;
-      if (window.innerWidth < 1024) return;
+      if (typeof window === 'undefined' || window.innerWidth < 1024) return;
 
-      let bestCandidate: { id: string, ratio: number } | null = null;
+      type Candidate = { id: string, ratio: number };
+      let bestCandidate: Candidate | null = null;
       entries.forEach(entry => {
         const id = entry.target.getAttribute('data-gastro-id');
         if (id && entry.isIntersecting) {
-          if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
-            bestCandidate = { id, ratio: entry.intersectionRatio };
+          const ratio = entry.intersectionRatio;
+          if (!bestCandidate || ratio > bestCandidate.ratio) {
+            bestCandidate = { id, ratio };
           }
         }
       });
 
-      if (bestCandidate && bestCandidate.id !== activeItemIdRef.current && bestCandidate.ratio > 0.4) {
-        setActiveItemId(bestCandidate.id);
-        lastUpdateRef.current = Date.now();
+      if (bestCandidate !== null) {
+        const candidate: Candidate = bestCandidate;
+        if (candidate.id !== activeItemIdRef.current && candidate.ratio > 0.4) {
+          setActiveItemId(candidate.id);
+          lastUpdateRef.current = Date.now();
+        }
       }
     };
 
@@ -502,7 +507,7 @@ export default function WeddingGastronomy({ lang = "es" }: { lang?: Language }) 
                     item={item} 
                     isActive={activeItemId === item.id}
                     onClick={() => {
-                      if (window.innerWidth < 1024) {
+                      if (typeof window === 'undefined' || window.innerWidth < 1024) {
                         setActiveItemId(prev => prev === item.id ? null : item.id);
                       } else {
                         handleScrollToCard(item.id);

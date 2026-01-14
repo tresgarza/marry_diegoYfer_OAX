@@ -93,21 +93,26 @@ export default function WeddingHotels({
   React.useEffect(() => {
     const callback = (entries: IntersectionObserverEntry[]) => {
       if (isLockedRef.current || Date.now() - lastUpdateRef.current < 200) return;
-      if (window.innerWidth < 1024) return;
+      if (typeof window === 'undefined' || window.innerWidth < 1024) return;
 
-      let bestCandidate: { name: string, ratio: number } | null = null;
+      type Candidate = { name: string, ratio: number };
+      let bestCandidate: Candidate | null = null;
       entries.forEach(entry => {
         const name = entry.target.getAttribute('data-hotel-name');
         if (name && entry.isIntersecting) {
-          if (!bestCandidate || entry.intersectionRatio > bestCandidate.ratio) {
-            bestCandidate = { name, ratio: entry.intersectionRatio };
+          const ratio = entry.intersectionRatio;
+          if (!bestCandidate || ratio > bestCandidate.ratio) {
+            bestCandidate = { name, ratio };
           }
         }
       });
 
-      if (bestCandidate && bestCandidate.name !== activeHotelIdRef.current && bestCandidate.ratio > 0.4) {
-        setActiveHotelId(bestCandidate.name);
-        lastUpdateRef.current = Date.now();
+      if (bestCandidate !== null) {
+        const candidate: Candidate = bestCandidate;
+        if (candidate.name !== activeHotelIdRef.current && candidate.ratio > 0.4) {
+          setActiveHotelId(candidate.name);
+          lastUpdateRef.current = Date.now();
+        }
       }
     };
 
@@ -174,7 +179,7 @@ export default function WeddingHotels({
               hotel={hotel} 
               isActive={activeHotelId === hotel.name}
               onManualClick={() => {
-                if (window.innerWidth < 1024) {
+                if (typeof window === 'undefined' || window.innerWidth < 1024) {
                   setActiveHotelId(prev => prev === hotel.name ? null : hotel.name);
                 } else {
                   handleScrollToCard(hotel.name);
