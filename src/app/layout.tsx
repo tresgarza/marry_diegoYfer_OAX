@@ -38,22 +38,19 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url:
-          "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757476063645-f3wef72rnce.png",
+        url: "/favicon.png",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url:
-          "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757476063645-f3wef72rnce.png",
+        url: "/favicon.png",
         type: "image/png",
       },
     ],
     shortcut: [
       {
-        url:
-          "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/document-uploads/1757476063645-f3wef72rnce.png",
+        url: "/favicon.png",
         type: "image/png",
       },
     ],
