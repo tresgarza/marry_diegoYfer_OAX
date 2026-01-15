@@ -7,7 +7,7 @@ import { RSVPProvider } from "@/lib/rsvp-context";
 
 const OG_IMAGE_URL = process.env.NEXT_PUBLIC_SITE_URL 
   ? `${process.env.NEXT_PUBLIC_SITE_URL}/invitation-og.png`
-  : 'https://ferydiego-oax.vercel.app/invitation-og.png';
+  : 'https://ferydiego-oax.marry.mx/invitation-og.png';
 
 export const metadata: Metadata = {
   title: "Fernanda & Diego — 12 de septiembre de 2026",
