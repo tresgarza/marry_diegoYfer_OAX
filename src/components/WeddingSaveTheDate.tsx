@@ -48,7 +48,7 @@ export default function WeddingSaveTheDate({
       style={style}
     >
       <div className="relative z-10 flex h-full w-full items-center">
-        <div className="w-full max-w-full px-6 py-10 sm:px-8 md:px-10">
+        <div className="w-full max-w-full px-6 py-10 sm:px-8 md:px-10 pb-64 sm:pb-80 md:pb-96">
           <div className="mx-auto max-w-4xl text-center">
             <p
               className={[
@@ -86,6 +86,35 @@ export default function WeddingSaveTheDate({
                 {subtext}
               </p>
             ) : null}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer with logo */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 pb-8 md:pb-12">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <p
+            className={[
+              "font-heading tracking-[0.15em] uppercase",
+              "text-[0.65rem] sm:text-xs md:text-sm",
+              "text-primary/70 mb-3",
+            ].join(" ")}
+          >
+            HECHO A LA MEDIDA POR
+          </p>
+          <div className="flex justify-center items-center">
+            <a
+              href="https://marry.mx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-opacity hover:opacity-100"
+            >
+              <img
+                src="/LOGO_SIMBOLO_Y_TEXTO_MARRYMX.png"
+                alt="marry.mx logo"
+                className="h-11 sm:h-14 md:h-16 w-auto opacity-90"
+              />
+            </a>
           </div>
         </div>
       </div>
