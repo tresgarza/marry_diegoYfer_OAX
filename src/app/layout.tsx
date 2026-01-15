@@ -6,8 +6,8 @@ import Script from "next/script";
 import { RSVPProvider } from "@/lib/rsvp-context";
 
 const OG_IMAGE_URL = process.env.NEXT_PUBLIC_SITE_URL 
-  ? `${process.env.NEXT_PUBLIC_SITE_URL}/invitation-og.png`
-  : 'https://ferydiego-oax.marry.mx/invitation-og.png';
+  ? `${process.env.NEXT_PUBLIC_SITE_URL}/invitation-og.jpg`
+  : 'https://ferydiego-oax.marry.mx/invitation-og.jpg';
 
 export const metadata: Metadata = {
   title: "Fernanda & Diego — 12 de septiembre de 2026",
