@@ -5,6 +5,10 @@ import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { RSVPProvider } from "@/lib/rsvp-context";
 
+const OG_IMAGE_URL = process.env.NEXT_PUBLIC_SITE_URL 
+  ? `${process.env.NEXT_PUBLIC_SITE_URL}/invitation-og.png`
+  : 'https://ferydiego-oax.vercel.app/invitation-og.png';
+
 export const metadata: Metadata = {
   title: "Fernanda & Diego — 12 de septiembre de 2026",
   description:
@@ -17,8 +21,7 @@ export const metadata: Metadata = {
     locale: "es_MX",
     images: [
       {
-        url:
-          "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/Fernanda-Diego-invitation-oficial-2-1768430745395.png",
+        url: OG_IMAGE_URL,
         width: 1200,
         height: 630,
         alt: "Invitación de boda Fernanda & Diego",
@@ -30,9 +33,7 @@ export const metadata: Metadata = {
     title: "Fernanda & Diego — 12 de septiembre de 2026",
     description:
       "Nos hace muchísima ilusión compartir este momento contigo. Te enviamos la invitación a nuestra boda. ¡Será un gusto que nos acompañes!",
-    images: [
-      "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/d2144260-8874-4248-9be8-8ff966b1067f/Fernanda-Diego-invitation-oficial-2-1768430745395.png",
-    ],
+    images: [OG_IMAGE_URL],
   },
   icons: {
     icon: [
